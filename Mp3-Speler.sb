@@ -1,0 +1,2482 @@
+achtergrond = ImageList.LoadImage("https://iili.io/BDlw1j.png")
+pause = ImageList.LoadImage("https://iili.io/BDlk7V.png")
+play = ImageList.LoadImage("https://iili.io/BDl8mP.png")
+stop = ImageList.LoadImage("https://iili.io/BDlghF.png")
+musicbox = ImageList.LoadImage("https://iili.io/BDlrLg.jpg")
+shuffle = ImageList.LoadImage("https://iili.io/BD1TVn.png")
+forward = ImageList.LoadImage("https://iili.io/BDEk74.png")
+previous = ImageList.LoadImage("https://iili.io/BDEvkl.png")
+top10bg =  ImageList.LoadImage("https://iili.io/nPsNHl.png")
+buttontop10 =  ImageList.LoadImage("https://iili.io/nPsrKb.png")
+balkjetop10 =  ImageList.LoadImage("https://iili.io/nPLogf.png")
+folder =  ImageList.LoadImage("https://iili.io/nPLI5l.png")
+playlist = ImageList.LoadImage("https://iili.io/nPLTe2.png")
+balkjeplaylist = ImageList.LoadImage("https://iili.io/nPLubS.png")
+scrolleen = ImageList.LoadImage("https://iili.io/nPL5X9.png")
+scrolltwee = ImageList.LoadImage("https://iili.io/nPLc0b.png")
+scrolldrie = ImageList.LoadImage("https://iili.io/nPL1dx.png")
+scrollvier = ImageList.LoadImage("https://iili.io/nPLMmB.png")
+name = ImageList.LoadImage("https://iili.io/nPLhLF.png")
+OK = ImageList.LoadImage("https://iili.io/nPLN1a.png")
+musiclist = ImageList.LoadImage("https://iili.io/nPLkdv.png")
+emptyplaylist = ImageList.LoadImage("https://iili.io/nPZ0NV.png")
+musicborder = ImageList.LoadImage("https://iili.io/ni3Txa.png")
+min = ImageList.LoadImage("https://iili.io/o9wSxS.png")
+plus = ImageList.LoadImage("https://iili.io/o9w4fe.png")
+slider = ImageList.LoadImage("https://iili.io/o9w1Np.png")
+sliderbutton = ImageList.LoadImage("https://iili.io/o9wVVt.png")
+print = ImageList.LoadImage("https://iili.io/oC4RG2.png")
+uparrow = ImageList.LoadImage("https://iili.io/oxmXOx.png")
+downarrow = ImageList.LoadImage("https://iili.io/oxmWRj.png")
+selectionArrow = ImageList.LoadImage("https://iili.io/oxmhDQ.png")
+
+hallo = 1
+GraphicsWindow.Width = 700
+GraphicsWindow.Height = 700
+GraphicsWindow.Top = 0
+GraphicsWindow.Left = 200
+GraphicsWindow.MouseMove = mousemove
+GraphicsWindow.MouseDown = mousedown
+
+TextWindow.Left = 1000
+TextWindow.Top= 1000
+
+'maak een filepath aan voor txt files om te printen
+GraphicsWindow.Show()
+fp = File.GetSettingsFilePath()
+For i = Text.GetLength(fp) to 1 step - 1
+  If (Text.GetSubText(fp, i , 1) = "\") Then
+    pos = i
+    i = 1
+  EndIf
+EndFor
+fp = Text.GetSubText(fp,1,pos)
+fp2 = fp + "playdata.txt"
+
+
+val = 0 'value van de playlist
+c = 0
+d = 0
+e = 0 
+f = 0
+g = 0
+j1 = 540
+selectionPosition = 1
+currentSong = ""
+
+'De afbeeldingen van alle achtergronden en knoppen worden hier ingevoeg
+achtergrond2 = Shapes.AddImage(achtergrond)
+Shapes.Move(achtergrond2, 0, 0)
+top10bg2 = Shapes.AddImage(top10bg)
+Shapes.Move(top10bg2, 380, 20)
+buttontop102 =  Shapes.AddImage(buttontop10)
+Shapes.Move(buttontop102, 436.5, 30)
+
+
+For q = 1 to 10
+  balkjetop102[q] = Shapes.AddImage(balkjetop10)
+  y15 = (q *31.5) + 55
+  Shapes.move(balkjetop102[q], 396.5, y15)
+  ''TextWindow.writeline(y15)
+EndFor
+
+play2 = Shapes.AddImage(play)
+shapes.Move(play2, 312.5 , 575)
+pause2 = Shapes.AddImage(pause)
+Shapes.Move(pause2, 425, 580)
+stop2 = Shapes.AddImage(stop)
+Shapes.Move(stop2, 200 , 580)
+musicbox2 = Shapes.AddImage(Musicbox)
+Shapes.Move(musicbox2, 140, 450)
+shuffle2 = Shapes.AddImage(shuffle)
+Shapes.Move(shuffle2, 560, 470)
+forward2 = Shapes.AddImage(forward)
+Shapes.Move(forward2, 527.5, 600)
+previous2 = Shapes.AddImage(previous)
+Shapes.Move(previous2, 117.5, 600)
+folder2 = Shapes.AddImage(folder)
+Shapes.Move(folder2, 650, 600)
+playlist2 = Shapes.AddImage(playlist)
+Shapes.Move(playlist2, 60, 75)
+musiclist2 = Shapes.AddImage(musiclist)
+Shapes.Move(musiclist2, 60, 175)
+emptyplaylist2 = Shapes.AddImage(emptyplaylist)
+Shapes.Move(emptyplaylist2, 60, 275)
+''min2 = Shapes.AddImage(min)
+''Shapes.Move(min2, 220, 375)
+''plus2 =  Shapes.AddImage(plus)
+''Shapes.Move(plus2, 130, 375)
+slider2 = Shapes.AddImage(slider)
+Shapes.move(slider2, 40, 450)
+sliderbutton2 = Shapes.AddImage(sliderbutton)
+Shapes.Move(sliderbutton2, 36.5, 540)
+print2 = Shapes.AddImage(print)
+Shapes.Move(print2, 650, 650)
+
+'' beginnen met volume op 50 om een referentiepunt te creeren
+For counter = 1 to 50
+ LDSound.Volume("Down")
+EndFor
+For counter = 1 To 25
+  LDSound.Volume("Up")
+EndFor
+
+grapje = Controls.AddTextBox( -100, -100) 'textbox verstopt om de text van die muziek in te kopieren omdat hij een shape niet als text herkent
+txt = "Nummer - Artiest"
+Controls.SetTextBoxText(grapje, txt)
+''helpje = Controls.AddTextBox(100,100)
+
+loadData()
+Program.Delay(100)
+setupContents()
+sanitizeContents()
+top10fill()
+Program.Delay(100)
+
+While "True"
+  If startPlayTime + (LDSound.MusicPlayTime(currentSong) * 1000) < Clock.ElapsedMilliseconds Then 
+  'If startPlayTime + 10000 < Clock.ElapsedMilliseconds Then
+    Sound.Stop(currentSong)
+    
+    startPlayTime = Clock.ElapsedMilliseconds
+    If start = "False" Then
+      selectionPosition = selectionPosition + 1  
+    Else
+      start = "False"  
+    EndIf
+  
+    currentSong = contents[selectionPosition]
+    
+    Shapes.Remove(nummer)
+    Shapes.Remove(Top10text3[lol])
+    
+    GraphicsWindow.FontName = "Georgia"
+    GraphicsWindow.FontSize = 16
+    GraphicsWindow.BrushColor = "#203864"
+    tempText = currentSong
+    While Text.IsSubText(tempText, "\") 
+      tempText = Text.GetSubText(tempText, Text.GetIndexOf(tempText, "\") + 1 , 100)
+    EndWhile
+    tempText = Text.GetSubText(tempText, 1, Text.GetLength(tempText) - 4)
+    
+    Controls.SetTextBoxText(grapje, tempText)
+    groepje = Controls.GetTextBoxText(grapje)
+    nummer = Shapes.AddText(groepje)
+    Shapes.Move(nummer, 155, 465)
+    
+    Sound.Play(currentSong)
+    Timer.Interval = 5000
+    Timer.Tick = Ontick    
+  EndIf
+  If mouseclicked Then
+    mouseclicked = "False"
+    x = 275
+    y = 475
+    w = 50
+    h = 50
+    stepSize = 55
+    
+    'code for musiclist playlist buttons
+    supercount = 1
+    For counter = 1 To val
+      If mx > 275  + (55 * counter - 1) And mx < 325 + (55 * counter - 1) And my > 475 And my < 525 Then
+        'TextWindow.WriteLine("Clicked: " + counter)
+        If Array.ContainsValue(playlists[counter], contents[selectionPosition]) Then
+          For counter629 = 1 To Array.GetItemCount(playlists[counter])
+            If playlists[counter][counter629] <> contents[selectionPosition] Then
+              tempPlaylist[supercount] = playlists[counter][counter629]
+              supercount = supercount + 1
+              'TextWindow.WriteLine(counter629)  
+              'TextWindow.WriteLine(contents[selectionPosition])
+            EndIf
+          EndFor
+          playlists[counter] = tempPlaylist
+        Else
+          playlists[counter][Array.GetItemCount(playlists[counter]) + 1] = contents[selectionPosition]
+        EndIf
+        saveData()
+        removeMusicList()
+        createMusiclist()
+      EndIf
+    EndFor
+    
+      'Code for playlistlist
+    If mx > 160 And mx < 185 And my > 245 And my < 270 And k <> 0  Then
+      playlistSelectionPosition = playlistSelectionPosition - 1
+      If playlistSelectionPosition < 1 Then
+        playlistSelectionPosition = Array.GetItemCount(playlists[f])
+      EndIf
+      removeMusicList()
+      showPlaylist()
+    EndIf
+    If mx > 160 And mx < 185 And my > 300 And my < 325 And k <> 0 Then
+      playlistSelectionPosition = playlistSelectionPosition + 1
+      If playlistSelectionPosition > Array.GetItemCount(playlists[f]) Then
+        playlistSelectionPosition = 1
+      EndIf
+      removeMusicList()
+      showPlaylist()
+    EndIf
+    
+    'selectionposition button during musiclist
+    w = 25
+    h = 25
+    x = 175
+    y = 280
+    If (mx > x And mx < x + w And my > y And my < y + h And k <> 0) Then
+      Shapes.Zoom(selectionArrow, 0.91, 0.91)
+      
+      Sound.Stop(currentSong)
+      currentSong = playlists[f][playlistSelectionPosition]
+      Sound.Play(currentSong)
+      
+      Shapes.Remove(nummer)
+      Shapes.Remove(musicborder3)
+      Shapes.Remove(Top10text3[lol])
+      
+      GraphicsWindow.FontName = "Georgia"
+      GraphicsWindow.FontSize = 16
+      GraphicsWindow.BrushColor = "#203864"
+      tempText = currentSong
+      While Text.IsSubText(tempText, "\") 
+        tempText = Text.GetSubText(tempText, Text.GetIndexOf(tempText, "\") + 1 , 100)
+      EndWhile
+      tempText = Text.GetSubText(tempText, 1, Text.GetLength(tempText) - 4)
+      
+      removeMusicList()
+      
+      
+      Shapes.Remove(Top10text3[lol])
+      Controls.SetTextBoxText(grapje, tempText)
+      groepje = Controls.GetTextBoxText(grapje)
+      nummer = Shapes.AddText(groepje)
+      Shapes.Move(nummer, 155, 465)
+      Timer.Interval = 5000
+      Timer.Tick = Ontick
+    EndIf
+    
+    'selectionposition button during musiclist
+    w = 25
+    h = 25
+    x = 175
+    y = 280
+    If (mx > x And mx < x + w And my > y And my < y + h And e = 1) Then
+      Shapes.Zoom(selectionArrow, 0.91, 0.91)
+      
+      Sound.Stop(currentSong)
+      currentSong = contents[selectionPosition]
+      Sound.Play(currentSong)
+      selectionPosition3 =  selectionPosition
+      
+      Shapes.Remove(nummer)
+     
+      
+      GraphicsWindow.FontName = "Georgia"
+      GraphicsWindow.FontSize = 16
+      GraphicsWindow.BrushColor = "#203864"
+      tempText = currentSong
+      While Text.IsSubText(tempText, "\") 
+        tempText = Text.GetSubText(tempText, Text.GetIndexOf(tempText, "\") + 1 , 100)
+      EndWhile
+      tempText = Text.GetSubText(tempText, 1, Text.GetLength(tempText) - 4)
+      
+      removeMusicList()
+      
+      Shapes.Remove(Top10text3[lol])
+      Controls.SetTextBoxText(grapje, tempText)
+      groepje = Controls.GetTextBoxText(grapje)
+      If text.GetLength(groepje) > 42 Then
+        temptext3 = text.GetSubText(groepje, 1 , 40)
+        nummer = Shapes.AddText(temptext3+ "..")
+      Else
+        nummer = Shapes.AddText(groepje)
+      EndIf
+      Shapes.Move(nummer, 155, 465)
+      
+      Timer.Interval = 5000
+      Timer.Tick = Ontick
+    EndIf
+    
+    'play
+    w = 75
+    h = 75
+    x = 312.5
+    y = 575
+    If (mx > x And mx < x + w And my > y And my < y + h And c <> 1 And e <> 1 And f = 0)Then
+      Shapes.Zoom(play2, 0.91, 0.91) 
+      
+      Shapes.Remove(nummer)
+      Shapes.Remove(Top10text3[lol])
+      
+      GraphicsWindow.FontName = "Georgia"
+      GraphicsWindow.FontSize = 16
+      GraphicsWindow.BrushColor = "#203864"
+      
+      tempText = contents[selectionPosition]
+      While Text.IsSubText(tempText, "\") 
+        tempText = Text.GetSubText(tempText, Text.GetIndexOf(tempText, "\") + 1 , 100)
+      EndWhile
+      tempText = Text.GetSubText(tempText, 1, Text.GetLength(tempText) - 4)
+      
+      Controls.SetTextBoxText(grapje, tempText)
+      groepje = Controls.GetTextBoxText(grapje)
+      If text.GetLength(groepje) > 42 Then
+        temptext3 = text.GetSubText(groepje, 1 , 40)
+        nummer = Shapes.AddText(temptext3+ "..")
+      Else
+        nummer = Shapes.AddText(groepje)
+      EndIf
+      Shapes.Move(nummer, 155, 465)
+      
+      ''Sound.Stop(currentSong)
+      currentSong = contents[selectionPosition]
+      Sound.Play(currentSong)
+      
+      Timer.Resume()
+      
+     
+     ElseIf (mx > x And mx < x + w And my > y And my < y + h And c <> 1 And e <> 1 And (f = 1 or f = 2 or f = 3 or f = 4 or f = 5))Then
+       Sound.Play(currentSong)
+       Timer.Resume()
+     EndIf
+
+     
+    
+    'pauze
+    w1 = 65
+    h1 = 65
+    x1 = 425
+    y1 = 580
+    If (mx > x1 And mx < x1 + w1 And my > y1 And my < y1 + h1 And c <> 1 And e <> 1)Then
+      Shapes.Zoom(pause2, 0.91, 0.91)
+      Sound.Pause(currentSong)
+      Timer.Pause()
+    EndIf
+    
+    'stop
+    w2 = 65
+    h2 = 65
+    x2 = 200
+    y2 = 580
+    If (mx > x2 And mx < x2 + w2 And my > y2 And my < y2 + h2 And c <> 1 And e <> 1)Then
+      Shapes.Zoom(stop2, 0.91, 0.91)
+      Sound.Stop(currentSong)
+      Timer.Interval = 100000000
+    EndIf
+    
+    'shuffle
+    w3 = 65
+    h3 = 37
+    x3 = 560
+    y3 = 470
+    If (mx > x3 And mx < x3 + w3 And my > y3 And my < y3 + h3 And c <> 1 And e <> 1 And f = 0)Then
+      Shapes.Zoom(shuffle2, 0.91, 0.91)
+      Sound.Stop(currentSong)
+      selectionPosition =  Math.GetRandomNumber(Array.GetItemCount(contents))
+      currentSong =  contents[selectionPosition]
+      Sound.Play(currentSong)
+    EndIf
+    
+    If (mx > x3 And mx < x3 + w3 And my > y3 And my < y3 + h3 And c <> 1 And e <> 1 And f = 1)Then
+      Shapes.Zoom(shuffle2, 0.91, 0.91)
+      Sound.Stop(currentSong)
+      selectionPosition =  Math.GetRandomNumber(Array.GetItemCount(playlists[1]))
+      currentSong =  playlists[1][selectionPosition]
+      Sound.Play(currentSong)
+    EndIf
+    
+    If (mx > x3 And mx < x3 + w3 And my > y3 And my < y3 + h3 And c <> 1 And e <> 1 And f = 2)Then
+      Shapes.Zoom(shuffle2, 0.91, 0.91)
+      Sound.Stop(currentSong)
+      selectionPosition =  Math.GetRandomNumber(Array.GetItemCount(playlists[1]))
+      currentSong =  playlists[2][selectionPosition]
+      Sound.Play(currentSong)
+    EndIf
+    
+    If (mx > x3 And mx < x3 + w3 And my > y3 And my < y3 + h3 And c <> 1 And e <> 1 And f = 3)Then
+      Shapes.Zoom(shuffle2, 0.91, 0.91)
+      Sound.Stop(currentSong)
+      selectionPosition =  Math.GetRandomNumber(Array.GetItemCount(playlists[3]))
+      currentSong =  playlists[3][selectionPosition]
+      Sound.Play(currentSong)
+    EndIf
+    
+    If (mx > x3 And mx < x3 + w3 And my > y3 And my < y3 + h3 And c <> 1 And e <> 1 And f = 4)Then
+      Shapes.Zoom(shuffle2, 0.91, 0.91)
+      Sound.Stop(currentSong)
+      selectionPosition =  Math.GetRandomNumber(Array.GetItemCount(playlists[4]))
+      currentSong =  playlists[4][selectionPosition]
+      Sound.Play(currentSong)
+    EndIf
+    
+    If (mx > x3 And mx < x3 + w3 And my > y3 And my < y3 + h3 And c <> 1 And e <> 1 And f = 5)Then
+      Shapes.Zoom(shuffle2, 0.91, 0.91)
+      Sound.Stop(currentSong)
+      random =  Math.GetRandomNumber(10)
+      playlistSelectionPosition =  (Array.GetItemCount(playData) - random)
+      currentSong =  playlists[5][playlistSelectionPosition]
+      Sound.Play(currentSong)
+    EndIf
+   
+    
+   
+    'forward
+    w4 = 45
+    h4 = 25
+    x4 = 527.5
+    y4 = 600
+    If (mx > x4 And mx < x4 + w4 And my > y4 And my < y4 + h4 And c <> 1 And e <> 1 And f = 0)Then
+      Shapes.Zoom(forward2, 0.91, 0.91)
+      
+      Sound.Stop(currentSong)
+      If selectionPosition =  Array.GetItemCount(contents)Then
+        selectionPosition = 1
+      Else
+        selectionPosition = selectionPosition + 1
+      EndIf
+      
+      currentSong = contents[selectionPosition]
+      Sound.Play(currentSong)
+      
+      Shapes.Remove(nummer)
+      Shapes.Remove(Top10text3[lol])
+      
+      GraphicsWindow.FontName = "Georgia"
+      GraphicsWindow.FontSize = 16
+      GraphicsWindow.BrushColor = "#203864"
+      tempText = contents[selectionPosition]
+      While Text.IsSubText(tempText, "\") 
+        tempText = Text.GetSubText(tempText, Text.GetIndexOf(tempText, "\") + 1 , 100)
+      EndWhile
+      tempText = Text.GetSubText(tempText, 1, Text.GetLength(tempText) - 4)
+      
+      Controls.SetTextBoxText(grapje, tempText)
+      groepje = Controls.GetTextBoxText(grapje)
+      If text.GetLength(groepje) > 42 Then
+        temptext3 = text.GetSubText(groepje, 1 , 40)
+        nummer = Shapes.AddText(temptext3+ "..")
+      Else
+        nummer = Shapes.AddText(groepje)
+      EndIf
+      Shapes.Move(nummer, 155, 465)
+      Timer.Interval = 5000
+      Timer.Tick = Ontick
+      
+    Elseif (mx > x4 And mx < x4 + w4 And my > y4 And my < y4 + h4 And c <> 1 And e <> 1 And f = 1)Then
+      If playlistSelectionPosition = Array.GetItemCount(playlists[1])Then
+        playlistSelectionPosition = 1
+      Else
+        playlistSelectionPosition =  playlistSelectionPosition  + 1
+      EndIf
+      Sound.Stop(currentSong)
+      currentSong = playlists[1][playlistSelectionPosition]
+      Sound.Play(currentSong)
+      
+      Shapes.Remove(nummer)
+      Shapes.Remove(Top10text3[lol])
+      
+      GraphicsWindow.FontName = "Georgia"
+      GraphicsWindow.FontSize = 16
+      GraphicsWindow.BrushColor = "#203864"
+      tempText = playlists[1][playlistSelectionPosition]
+      While Text.IsSubText(tempText, "\") 
+        tempText = Text.GetSubText(tempText, Text.GetIndexOf(tempText, "\") + 1 , 100)
+      EndWhile
+      tempText = Text.GetSubText(tempText, 1, Text.GetLength(tempText) - 4)
+      
+      Controls.SetTextBoxText(grapje, tempText)
+      groepje = Controls.GetTextBoxText(grapje)
+      If text.GetLength(groepje) > 42 Then
+        temptext3 = text.GetSubText(groepje, 1 , 40)
+        nummer = Shapes.AddText(temptext3+ "..")
+      Else
+        nummer = Shapes.AddText(groepje)
+      EndIf
+      Shapes.Move(nummer, 155, 465)
+      
+      Timer.Interval = 5000
+      Timer.Tick = Ontick
+
+    Elseif (mx > x4 And mx < x4 + w4 And my > y4 And my < y4 + h4 And c <> 1 And e <> 1 And f = 2)Then
+      If playlistSelectionPosition = Array.GetItemCount(playlists[2])Then
+        playlistSelectionPosition = 1
+      Else
+        playlistSelectionPosition =  playlistSelectionPosition  + 1
+      EndIf
+      Sound.Stop(currentSong)
+      currentSong = playlists[2][playlistSelectionPosition]
+      Sound.Play(currentSong)
+      
+      Shapes.Remove(nummer)
+      Shapes.Remove(Top10text3[lol])
+      
+      GraphicsWindow.FontName = "Georgia"
+      GraphicsWindow.FontSize = 16
+      GraphicsWindow.BrushColor = "#203864"
+      tempText = playlists[2][playlistSelectionPosition]
+      While Text.IsSubText(tempText, "\") 
+        tempText = Text.GetSubText(tempText, Text.GetIndexOf(tempText, "\") + 1 , 100)
+      EndWhile
+      tempText = Text.GetSubText(tempText, 1, Text.GetLength(tempText) - 4)
+      
+      Controls.SetTextBoxText(grapje, tempText)
+      groepje = Controls.GetTextBoxText(grapje)
+      If text.GetLength(groepje) > 42 Then
+        temptext3 = text.GetSubText(groepje, 1 , 40)
+        nummer = Shapes.AddText(temptext3+ "..")
+      Else
+        nummer = Shapes.AddText(groepje)
+      EndIf
+      Shapes.Move(nummer, 155, 465)
+      
+      Timer.Interval = 5000
+      Timer.Tick = Ontick
+      
+    Elseif (mx > x4 And mx < x4 + w4 And my > y4 And my < y4 + h4 And c <> 1 And e <> 1 And f = 3)Then
+      If playlistSelectionPosition = Array.GetItemCount(playlists[3])Then
+        playlistSelectionPosition = 1
+      Else
+        playlistSelectionPosition =  playlistSelectionPosition  + 1
+      EndIf
+      Sound.Stop(currentSong)
+      currentSong = playlists[3][playlistSelectionPosition]
+      Sound.Play(currentSong)
+      
+      Shapes.Remove(nummer)
+      Shapes.Remove(Top10text3[lol])
+      
+      GraphicsWindow.FontName = "Georgia"
+      GraphicsWindow.FontSize = 16
+      GraphicsWindow.BrushColor = "#203864"
+      tempText = playlists[3][playlistSelectionPosition]
+      While Text.IsSubText(tempText, "\") 
+        tempText = Text.GetSubText(tempText, Text.GetIndexOf(tempText, "\") + 1 , 100)
+      EndWhile
+      tempText = Text.GetSubText(tempText, 1, Text.GetLength(tempText) - 4)
+      
+      Controls.SetTextBoxText(grapje, tempText)
+      groepje = Controls.GetTextBoxText(grapje)
+      If text.GetLength(groepje) > 42 Then
+        temptext3 = text.GetSubText(groepje, 1 , 40)
+        nummer = Shapes.AddText(temptext3+ "..")
+      Else
+        nummer = Shapes.AddText(groepje)
+      EndIf
+      Shapes.Move(nummer, 155, 465)
+    Elseif (mx > x4 And mx < x4 + w4 And my > y4 And my < y4 + h4 And c <> 1 And e <> 1 And f = 4)Then
+      If playlistSelectionPosition = Array.GetItemCount(playlists[4])Then
+        playlistSelectionPosition = 1
+      Else
+        playlistSelectionPosition =  playlistSelectionPosition  + 1
+      EndIf
+      Sound.Stop(currentSong)
+      currentSong = playlists[4][playlistSelectionPosition]
+      Sound.Play(currentSong)
+      
+      Shapes.Remove(nummer)
+      Shapes.Remove(Top10text3[lol])
+      
+      GraphicsWindow.FontName = "Georgia"
+      GraphicsWindow.FontSize = 16
+      GraphicsWindow.BrushColor = "#203864"
+      tempText = playlists[4][playlistSelectionPosition]
+      While Text.IsSubText(tempText, "\") 
+        tempText = Text.GetSubText(tempText, Text.GetIndexOf(tempText, "\") + 1 , 100)
+      EndWhile
+      tempText = Text.GetSubText(tempText, 1, Text.GetLength(tempText) - 4)
+      
+      Controls.SetTextBoxText(grapje, tempText)
+      groepje = Controls.GetTextBoxText(grapje)
+      If text.GetLength(groepje) > 42 Then
+        temptext3 = text.GetSubText(groepje, 1 , 40)
+        nummer = Shapes.AddText(temptext3+ "..")
+      Else
+        nummer = Shapes.AddText(groepje)
+      EndIf
+      Shapes.Move(nummer, 155, 465)
+      
+      Timer.Interval = 5000
+      Timer.Tick = Ontick
+      
+    Elseif (mx > x4 And mx < x4 + w4 And my > y4 And my < y4 + h4 And c <> 1 And e <> 1 And f = 5)Then
+      Shapes.Zoom(forward2, 0.91, 0.91)  
+      Sound.Stop(contents[selectionPosition])
+      Sound.Stop(nummertjes[lol])
+      Sound.Stop(currentSong)
+      Shapes.Remove(Top10text3[lol])
+      loadData()
+      
+      If Array.GetItemCount(playData) < 11 Then 
+       arrayPosition2 = Array.GetItemCount(playData)
+      Else
+       arrayPosition2 = 10
+     EndIf
+     
+     nummertjes2 =  Array.GetAllIndices(playData)
+     
+     If Array.GetItemCount(playData) > 10 then
+       For count = Array.GetItemCount(playData) - 9 to Array.GetItemCount(playData)
+         indices2[arrayPosition2] =  nummertjes2[count]
+         arrayPosition2 = arrayPosition2 - 1
+       Endfor
+     Else
+       For count = 1 to Array.GetItemCount(playData)
+         indices2[arrayPosition2] = nummertjes2[count]
+         arrayPosition2 = arrayPosition2 - 1
+       Endfor
+     EndIf
+
+
+     If Array.ContainsValue(indices2, currentSong)Then
+       If lol = 1 then
+        lol = 10
+       Else
+        lol = lol - 1  
+       EndIf
+        currentSong = indices2[lol]
+        Sound.Play(currentSong)
+        
+       GraphicsWindow.FontName = "Georgia"
+       GraphicsWindow.FontSize = 16
+       GraphicsWindow.BrushColor = "#203864"
+       If text.GetLength(textje[lol]) > 42 Then
+        temptext3[lol] = text.GetSubText(textje[lol], 1 , 40)
+        Top10text3[lol] = Shapes.AddText(temptext3[lol]+ "..")
+       Else
+        Top10text3[lol] = Shapes.AddText(textje[lol])
+       EndIf
+        Shapes.Move(Top10text3[lol], 155, 465)
+      EndIf   
+      
+      Timer.Interval = 5000
+      Timer.Tick = Ontick
+    EndIf
+    
+    
+    
+    'previous
+    w5 = 45
+    h5 = 25
+    x5 = 117.5
+    y5 = 600
+    If (mx > x5 And mx < x5 + w5 And my > y5 And my < y5 + h5 And c <> 1 And e <> 1 And f = 0)Then
+      Shapes.Zoom(previous2, 0.91, 0.91)
+      
+      Sound.Stop(contents[selectionPosition])
+      If selectionPosition = 1 Then
+        selectionPosition =  Array.GetItemCount(contents)
+      Else
+        selectionPosition = selectionPosition - 1
+      EndIf
+      currentSong = contents[selectionPosition]
+      Sound.Play(currentSong)
+      
+      Shapes.Remove(nummer)
+      Shapes.Remove(Top10text3[lol])
+      
+      GraphicsWindow.FontName = "Georgia"
+      GraphicsWindow.FontSize = 16
+      GraphicsWindow.BrushColor = "#203864"
+      tempText = contents[selectionPosition]
+      While Text.IsSubText(tempText, "\") 
+        tempText = Text.GetSubText(tempText, Text.GetIndexOf(tempText, "\") + 1 , 100)
+      EndWhile
+      tempText = Text.GetSubText(tempText, 1, Text.GetLength(tempText) - 4)
+      
+      Controls.SetTextBoxText(grapje, tempText)
+      groepje = Controls.GetTextBoxText(grapje)
+      If text.GetLength(groepje) > 42 Then
+        temptext3 = text.GetSubText(groepje, 1 , 40)
+        nummer = Shapes.AddText(temptext3+ "..")
+      Else
+        nummer = Shapes.AddText(groepje)
+      EndIf
+      Shapes.Move(nummer, 155, 465) 
+    
+      Timer.Interval = 5000
+      Timer.Tick = Ontick
+        
+    Elseif (mx > x5 And mx < x5 + w5 And my > y5 And my < y5 + h5 And c <> 1 And e <> 1 And f = 1)Then
+      If playlistSelectionPosition = 1 Then
+        playlistSelectionPosition = Array.GetItemCount(playlists[1])
+      Else
+        playlistSelectionPosition =  playlistSelectionPosition-1
+      EndIf
+      Sound.Stop(currentSong)
+      currentSong = playlists[1][playlistSelectionPosition]
+      Sound.Play(currentSong)
+      
+      Shapes.Remove(nummer)
+      Shapes.Remove(Top10text3[lol])
+      
+      GraphicsWindow.FontName = "Georgia"
+      GraphicsWindow.FontSize = 16
+      GraphicsWindow.BrushColor = "#203864"
+      tempText = playlists[1][playlistSelectionPosition]
+      While Text.IsSubText(tempText, "\") 
+        tempText = Text.GetSubText(tempText, Text.GetIndexOf(tempText, "\") + 1 , 100)
+      EndWhile
+      tempText = Text.GetSubText(tempText, 1, Text.GetLength(tempText) - 4)
+      
+      Controls.SetTextBoxText(grapje, tempText)
+      groepje = Controls.GetTextBoxText(grapje)
+      If text.GetLength(groepje) > 42 Then
+        temptext3 = text.GetSubText(groepje, 1 , 40)
+        nummer = Shapes.AddText(temptext3+ "..")
+      Else
+        nummer = Shapes.AddText(groepje)
+      EndIf
+      Shapes.Move(nummer, 155, 465)
+    Elseif (mx > x5 And mx < x5 + w5 And my > y5 And my < y5 + h5 And c <> 1 And e <> 1 And f = 2)Then
+      If playlistSelectionPosition = 1 Then
+        playlistSelectionPosition = Array.GetItemCount(playlists[2])
+      Else
+        playlistSelectionPosition =  playlistSelectionPosition-1
+      EndIf
+      Sound.Stop(currentSong)
+      currentSong = playlists[2][playlistSelectionPosition]
+      Sound.Play(currentSong)
+      
+      Shapes.Remove(nummer)
+      Shapes.Remove(Top10text3[lol])
+      
+      GraphicsWindow.FontName = "Georgia"
+      GraphicsWindow.FontSize = 16
+      GraphicsWindow.BrushColor = "#203864"
+      tempText = playlists[2][playlistSelectionPosition]
+      While Text.IsSubText(tempText, "\") 
+        tempText = Text.GetSubText(tempText, Text.GetIndexOf(tempText, "\") + 1 , 100)
+      EndWhile
+      tempText = Text.GetSubText(tempText, 1, Text.GetLength(tempText) - 4)
+      
+      Controls.SetTextBoxText(grapje, tempText)
+      groepje = Controls.GetTextBoxText(grapje)
+      If text.GetLength(groepje) > 42 Then
+        temptext3 = text.GetSubText(groepje, 1 , 40)
+        nummer = Shapes.AddText(temptext3+ "..")
+      Else
+        nummer = Shapes.AddText(groepje)
+      EndIf
+      Shapes.Move(nummer, 155, 465)
+      
+      Timer.Interval = 5000
+      Timer.Tick = Ontick
+            
+   Elseif (mx > x5 And mx < x5 + w5 And my > y5 And my < y5 + h5 And c <> 1 And e <> 1 And f = 3)Then
+      If playlistSelectionPosition = 1 Then
+        playlistSelectionPosition = Array.GetItemCount(playlists[3])
+      Else
+        playlistSelectionPosition = playlistSelectionPosition-1
+      EndIf
+      Sound.Stop(currentSong)
+      currentSong = playlists[3][playlistSelectionPosition]
+      Sound.Play(currentSong)
+      
+      Shapes.Remove(nummer)
+      Shapes.Remove(Top10text3[lol])
+     
+      GraphicsWindow.FontName = "Georgia"
+      GraphicsWindow.FontSize = 16
+      GraphicsWindow.BrushColor = "#203864"
+      tempText = playlists[3][playlistSelectionPosition]
+      While Text.IsSubText(tempText, "\") 
+        tempText = Text.GetSubText(tempText, Text.GetIndexOf(tempText, "\") + 1 , 100)
+      EndWhile
+      tempText = Text.GetSubText(tempText, 1, Text.GetLength(tempText) - 4)
+      
+      Controls.SetTextBoxText(grapje, tempText)
+      groepje = Controls.GetTextBoxText(grapje)
+      If text.GetLength(groepje) > 42 Then
+        temptext3 = text.GetSubText(groepje, 1 , 40)
+        nummer = Shapes.AddText(temptext3+ "..")
+      Else
+        nummer = Shapes.AddText(groepje)
+      EndIf
+      Shapes.Move(nummer, 155, 465)
+      
+      Timer.Interval = 5000
+      Timer.Tick = Ontick
+      
+    Elseif (mx > x5 And mx < x5 + w5 And my > y5 And my < y5 + h5 And c <> 1 And e <> 1 And f = 4)Then
+      If playlistSelectionPosition = 1 Then
+        playlistSelectionPosition = Array.GetItemCount(playlists[4])
+      Else
+        playlistSelectionPosition = playlistSelectionPosition-1
+      EndIf
+      Sound.Stop(currentSong)
+      currentSong = playlists[4][playlistSelectionPosition]
+      Sound.Play(currentSong)
+      
+      Shapes.Remove(nummer)
+      Shapes.Remove(Top10text3[lol])
+      
+      GraphicsWindow.FontName = "Georgia"
+      GraphicsWindow.FontSize = 16
+      GraphicsWindow.BrushColor = "#203864"
+      tempText = playlists[4][playlistSelectionPosition]
+      While Text.IsSubText(tempText, "\") 
+        tempText = Text.GetSubText(tempText, Text.GetIndexOf(tempText, "\") + 1 , 100)
+      EndWhile
+      tempText = Text.GetSubText(tempText, 1, Text.GetLength(tempText) - 4)
+      
+      Controls.SetTextBoxText(grapje, tempText)
+      groepje = Controls.GetTextBoxText(grapje)
+      If text.GetLength(groepje) > 42 Then
+        temptext3 = text.GetSubText(groepje, 1 , 40)
+        nummer = Shapes.AddText(temptext3+ "..")
+      Else
+        nummer = Shapes.AddText(groepje)
+      EndIf
+      Shapes.Move(nummer, 155, 465)
+      
+      Timer.Interval = 5000
+      Timer.Tick = Ontick
+      
+    ElseIf(mx > x5 And mx < x5 + w5 And my > y5 And my < y5 + h5 And c <> 1 And e <> 1 And f = 5)Then
+     '' TextWindow.WriteLine("f = "+ f)
+      Sound.Stop(contents[selectionPosition])
+      Sound.Stop(nummertjes[lol])
+      Sound.Stop(currentSong)
+      Shapes.Remove(Top10text3[lol])
+      loadData()
+      
+      If Array.GetItemCount(playData) < 11 Then 
+       arrayPosition2 = Array.GetItemCount(playData)
+      Else
+       arrayPosition2 = 10
+     EndIf
+     
+     nummertjes2 =  Array.GetAllIndices(playData)
+     
+     If Array.GetItemCount(playData) > 10 then
+       For count = Array.GetItemCount(playData) - 9 to Array.GetItemCount(playData)
+         indices2[arrayPosition2] =  nummertjes2[count]
+         arrayPosition2 = arrayPosition2 - 1
+       Endfor
+     Else
+       For count = 1 to Array.GetItemCount(playData)
+         indices2[arrayPosition2] = nummertjes2[count]
+         arrayPosition2 = arrayPosition2 - 1
+       Endfor
+     EndIf
+
+
+     If Array.ContainsValue(indices2, currentSong)Then
+       If lol = Array.GetItemCount(indices2)then
+        lol = 1
+       Else
+         lol = lol + 1  
+       EndIf
+        currentSong = indices2[lol]
+        Sound.Play(currentSong)
+        
+       GraphicsWindow.FontName = "Georgia"
+       GraphicsWindow.FontSize = 16
+       GraphicsWindow.BrushColor = "#203864"
+       If text.GetLength(textje[lol]) > 42 Then
+        temptext3[lol] = text.GetSubText(textje[lol], 1 , 40)
+        Top10text3[lol] = Shapes.AddText(temptext3[lol]+ "..")
+       Else
+        Top10text3[lol] = Shapes.AddText(textje[lol])
+      EndIf
+      
+      Shapes.Move(Top10text3[lol], 155, 465)
+      
+      Timer.Interval = 5000
+      Timer.Tick = Ontick
+      EndIf  
+    EndIf
+    
+    
+     
+    
+    'playlist ( met scrollbalkje)
+    w6 = 270
+    h6 = 60
+    x6 = 60 
+    y6 = 75
+    '' Geen playlist
+    If (mx > x6 And mx < x6 + w6 And my > y6 And my < y6 + h6 And d <> 1 And e <> 1 and val  = 0)Then
+      d = 1
+      Shapes.Remove(scrolleen2)
+      Shapes.Remove(balkjeplaylist1)
+      Shapes.Remove(playtext)
+      Shapes.Zoom(playlist2, 0.97, 0.97)
+      scrolleen2 = Shapes.AddImage(scrolleen)
+      balkjeplaylist1 =  Shapes.AddImage(balkjeplaylist)
+      Shapes.Move(scrolleen2, 120, 125)
+      Shapes.Move(balkjeplaylist1, 139.5, 138.5)
+      GraphicsWindow.FontName = "Georgia"
+      GraphicsWindow.FontSize = 16
+      GraphicsWindow.BrushColor = "#203864"
+      playtext = Shapes.AddText("Add Playlist...")   
+      Shapes.Move(playtext, 146,  142)  
+    EndIf
+    
+    
+    'Eén playlist
+    If (mx > x6 And mx < x6 + w6 And my > y6 And my < y6 + h6 And d <> 1 and e <> 1 And val = 1)Then
+      d = 1
+      Shapes.Remove(scrolltwee2)
+      Shapes.Remove(balkjeplaylist1)
+      Shapes.Remove(balkjeplaylist2)
+      Shapes.Remove(playtext)
+      Shapes.Remove(PLN1)
+      Shapes.Remove(PLN12)
+      Shapes.Zoom(playlist2, 0.97, 0.97)
+      scrolltwee2 = Shapes.AddImage(scrolltwee)
+      balkjeplaylist1 =  Shapes.AddImage(balkjeplaylist)
+      balkjeplaylist2 =  Shapes.AddImage(balkjeplaylist)
+      Shapes.Move(scrolltwee2, 120, 125)
+      Shapes.Move(balkjeplaylist1, 139.5, 142.5)
+      Shapes.Move(balkjeplaylist2, 139.5, 190)
+      GraphicsWindow.FontName = "Georgia"
+      GraphicsWindow.FontSize = 16
+      GraphicsWindow.BrushColor = "#203864"
+      playtext = Shapes.AddText("Add Playlist...") 
+      Shapes.Move(playtext, 146, 195.5)  
+      If Text.GetLength(PLNN[1]) < 21 Then   '' Als de text te lang wordt en buiten de border valt. Subtext en 2 puntjes binnen de border 
+        PLN1 = Shapes.AddText(PLNN[1])
+        Shapes.Move(PLN1, 146,  147) 
+      EndIf
+      If Text.GetLength(PLNN[1]) > 20 Then
+        PLN11 = Text.GetSubText(PLNN[1], 1 , 19)
+        PLN12 = Shapes.AddText(PLN11 + "..")
+        Shapes.Move(PLN12, 146,  147) 
+      EndIf
+    EndIf
+    
+    '2 playlists 
+    If (mx > x6 And mx < x6 + w6 And my > y6 And my < y6 + h6 And d <> 1 and e <> 1 and val = 2)Then
+      d = 1
+      Shapes.Remove(scrolldrie2)
+      Shapes.Remove(balkjeplaylist1)
+      Shapes.Remove(balkjeplaylist2)
+      Shapes.Remove(balkjeplaylist3)
+      Shapes.Remove(playtext)
+      Shapes.Remove(PLN1)
+      Shapes.Remove(PLN12)
+      Shapes.Remove(PLN2)
+      Shapes.Remove(pLN22)
+      Shapes.Zoom(playlist2, 0.97, 0.97)
+      scrolldrie2 = Shapes.AddImage(scrolldrie)
+      balkjeplaylist1 =  Shapes.AddImage(balkjeplaylist)
+      balkjeplaylist2 =  Shapes.AddImage(balkjeplaylist)
+      balkjeplaylist3 =  Shapes.AddImage(balkjeplaylist)
+      Shapes.Move(scrolldrie2, 120, 125)
+      Shapes.Move(balkjeplaylist1, 139.5, 142.5)
+      Shapes.Move(balkjeplaylist2, 139.5, 193.5)
+      Shapes.Move(balkjeplaylist3, 139.5, 242.75)
+      GraphicsWindow.FontName = "Georgia"
+      GraphicsWindow.FontSize = 16
+      GraphicsWindow.BrushColor = "#203864"
+      playtext = Shapes.AddText("Add Playlist...")
+      Shapes.Move(playtext, 146, 248.25)
+      If Text.GetLength(PLNN[1]) < 21 Then   
+        PLN1 = Shapes.AddText(PLNN[1])
+        Shapes.Move(PLN1, 146,  199) 
+      EndIf
+      If Text.GetLength(PLNN[1]) > 20 Then
+        PLN11 = Text.GetSubText(PLNN[1], 1 , 19)
+        PLN12 = Shapes.AddText(PLN11 + "..")
+        Shapes.Move(PLN12, 146,  199) 
+      EndIf
+      If Text.GetLength(PLNN[2]) < 21 Then   
+        PLN2 = Shapes.AddText(PLNN[2])
+        Shapes.Move(PLN2, 146,  148) 
+      EndIf
+      If Text.GetLength(PLNN[2]) > 20 Then
+        PLN21 = Text.GetSubText(PLNN[2], 1 , 19)
+        PLN22 = Shapes.AddText(PLN21 + "..")
+        Shapes.Move(PLN22, 146,  148) 
+      EndIf
+    EndIf
+
+    
+    '3 playlists 
+    If (mx > x6 And mx < x6 + w6 And my > y6 And my < y6 + h6 And d <> 1 And e <> 1 and val = 3)Then
+      d = 1
+      Shapes.Remove(scrollvier2)
+      Shapes.Remove(balkjeplaylist1)
+      Shapes.Remove(balkjeplaylist2)
+      Shapes.Remove(balkjeplaylist3)
+      Shapes.Remove(balkjeplaylist4)
+      Shapes.Remove(playtext)
+      Shapes.Remove(PLN1)
+      Shapes.Remove(PLN12)
+      Shapes.Remove(PLN2)
+      Shapes.Remove(PLN22)
+      Shapes.Remove(PLN3)
+      Shapes.Remove(PLN32)
+      Shapes.Zoom(playlist2, 0.97, 0.97)
+      scrollvier2 = Shapes.AddImage(scrollvier)
+      balkjeplaylist1 =  Shapes.AddImage(balkjeplaylist)
+      balkjeplaylist2 =  Shapes.AddImage(balkjeplaylist)
+      balkjeplaylist3 =  Shapes.AddImage(balkjeplaylist)
+      balkjeplaylist4 =  Shapes.AddImage(balkjeplaylist)
+      Shapes.Move(scrollvier2, 120, 125)
+      Shapes.Move(balkjeplaylist1, 139.5, 146)
+      Shapes.Move(balkjeplaylist2, 139.5, 197)
+      Shapes.Move(balkjeplaylist3, 139.5, 248)
+      Shapes.Move(balkjeplaylist4, 139.5, 299)
+      GraphicsWindow.FontName = "Georgia"
+      GraphicsWindow.FontSize = 16
+      GraphicsWindow.BrushColor = "#203864"
+      playtext = Shapes.AddText("Add Playlist...")
+      Shapes.Move(playtext, 146, 304.5)
+      If Text.GetLength(PLNN[1]) < 21 Then   
+        PLN1 = Shapes.AddText(PLNN[1])
+        Shapes.Move(PLN1, 146,  253.5) 
+      EndIf
+      If Text.GetLength(PLNN[1]) > 20 Then
+        PLN11 = Text.GetSubText(PLNN[1], 1 , 19)
+        PLN12 = Shapes.AddText(PLN11 + "..")
+        Shapes.Move(PLN12, 146,  253.5) 
+      EndIf
+      If Text.GetLength(PLNN[2]) < 21 Then   
+        PLN2 = Shapes.AddText(PLNN[2])
+        Shapes.Move(PLN2, 146,  202.5) 
+      EndIf
+      If Text.GetLength(PLNN[2]) > 20 Then
+        PLN21 = Text.GetSubText(PLNN[2], 1 , 19)
+        PLN22 = Shapes.AddText(PLN21 + "..")
+        Shapes.Move(PLN22, 146,  202.5) 
+      EndIf
+      If Text.GetLength(PLNN[3]) < 21 Then   
+        PLN3 = Shapes.AddText(PLNN[3])
+        Shapes.Move(PLN3, 146,  151.5) 
+      EndIf
+      If Text.GetLength(PLNN[3]) > 20 Then
+        PLN31 = Text.GetSubText(PLNN[3], 1 , 19)
+        PLN32 = Shapes.AddText(PLN31 + "..")
+        Shapes.Move(PLN32, 146,  151.5) 
+      EndIf    
+    EndIf
+    
+    '4 playlists
+    If (mx > x6 And mx < x6 + w6 And my > y6 And my < y6 + h6 And d <> 1 And e <> 1 and val = 4)Then
+      d = 1
+      Shapes.Remove(scrollvier2)
+      Shapes.Remove(balkjeplaylist1)
+      Shapes.Remove(balkjeplaylist2)
+      Shapes.Remove(balkjeplaylist3)
+      Shapes.Remove(balkjeplaylist4)
+      Shapes.Remove(playtext)
+      Shapes.Remove(PLN1)
+      Shapes.Remove(PLN12)
+      Shapes.Remove(PLN2)
+      Shapes.Remove(PLN22)
+      Shapes.Remove(PLN3)
+      Shapes.Remove(PLN32)
+      Shapes.Remove(PLN4)
+      Shapes.Remove(PLN42)
+      Shapes.Zoom(playlist2, 0.97, 0.97)
+      scrollvier2 = Shapes.AddImage(scrollvier)
+      balkjeplaylist1 =  Shapes.AddImage(balkjeplaylist)
+      balkjeplaylist2 =  Shapes.AddImage(balkjeplaylist)
+      balkjeplaylist3 =  Shapes.AddImage(balkjeplaylist)
+      balkjeplaylist4 =  Shapes.AddImage(balkjeplaylist)
+      Shapes.Move(scrollvier2, 120, 125)
+      Shapes.Move(balkjeplaylist1, 139.5, 146)
+      Shapes.Move(balkjeplaylist2, 139.5, 197)
+      Shapes.Move(balkjeplaylist3, 139.5, 248)
+      Shapes.Move(balkjeplaylist4, 139.5, 299)
+      GraphicsWindow.FontName = "Georgia"
+      GraphicsWindow.FontSize = 16
+      GraphicsWindow.BrushColor = "#203864"
+      If Text.GetLength(PLNN[1]) < 21 Then   
+        PLN1 = Shapes.AddText(PLNN[1])
+        Shapes.Move(PLN1, 146,  304.5) 
+      EndIf
+      If Text.GetLength(PLNN[1]) > 20 Then
+        PLN11 = Text.GetSubText(PLNN[1], 1 , 19)
+        PLN12 = Shapes.AddText(PLN11 + "..")
+        Shapes.Move(PLN12, 146,  304.5) 
+      EndIf
+      If Text.GetLength(PLNN[2]) < 21 Then   
+        PLN2 = Shapes.AddText(PLNN[2])
+        Shapes.Move(PLN2, 146,  253.5) 
+      EndIf
+      If Text.GetLength(PLNN[2]) > 20 Then
+        PLN21 = Text.GetSubText(PLNN[2], 1 , 19)
+        PLN22 = Shapes.AddText(PLN21 + "..")
+        Shapes.Move(PLN22, 146,  253.5) 
+      EndIf
+      If Text.GetLength(PLNN[3]) < 21 Then   
+        PLN3 = Shapes.AddText(PLNN[3])
+        Shapes.Move(PLN3, 146,  202.5) 
+      EndIf
+      If Text.GetLength(PLNN[3]) > 20 Then
+        PLN31 = Text.GetSubText(PLNN[3], 1 , 19)
+        PLN32 = Shapes.AddText(PLN31 + "..")
+        Shapes.Move(PLN32, 146,  202.5) 
+      EndIf  
+      If Text.GetLength(PLNN[4]) < 21 Then   
+        PLN4 = Shapes.AddText(PLNN[4])
+        Shapes.Move(PLN4, 146,  151.5) 
+      EndIf
+      If Text.GetLength(PLNN[4]) > 20 Then
+        PLN41 = Text.GetSubText(PLNN[4], 1 , 19)
+        PLN42 = Shapes.AddText(PLN41 + "..")
+        Shapes.Move(PLN42, 146,  151.5) 
+      EndIf    
+    EndIf
+   
+    'geen playlistknop in dropdown menu 
+    If d = 1 and val = 0 Then
+      w8 = 203
+      h8 = 30
+      x8 = 139.5
+      y8 = 138.5
+      If (mx > x8 And mx < x8 + w8 And my > y8 And my < y8 + h8 And c <> 1 And e <> 1)Then
+        Shapes.Zoom(balkjeplaylist1, 0.97, 0.97)
+        makeplaylist()
+      EndIf   
+    EndIf
+    
+    '1 playlistknop in dropdownmen
+    If d = 1 And val =  1 Then
+      w10 = 203
+      h10 = 30
+      x10 = 139.5
+      y10 = 142.5
+      y102 = 190
+      If (mx > x10 And mx < x10 + w10 And my > y10 And my < y10 + h10 And c <> 1 And e <> 1 And Mouse.IsLeftButtonDown)Then
+        Shapes.Zoom(balkjeplaylist1, 0.97, 0.97)
+        Shapes.Remove(scrolleen2)
+        Shapes.Remove(balkjeplaylist1)
+        Shapes.Remove(balkjeplaylist2)
+        Shapes.Remove(balkjeplaylist3)
+        Shapes.Remove(balkjeplaylist4)
+        Shapes.Remove(playtext)    
+        Shapes.Remove(PLN1) 
+        shapes.Remove(PlN12)
+        Shapes.Remove(PLN2)
+        Shapes.Remove(PLN22)
+        Shapes.Remove(PLN3)
+        Shapes.Remove(PLN32)
+        Shapes.Remove(PLN4)
+        Shapes.Remove(PLN42)
+        playlistnaam1()
+      EndIf 
+      If (mx > x10 And mx < x10 + w10 And my > y102 And my < y102 + h10 And c <> 1 And e <> 1)Then
+        Shapes.Zoom(balkjeplaylist2, 0.97, 0.97)
+        Shapes.Remove(scrolleen2)
+        Shapes.Remove(balkjeplaylist1)
+        Shapes.Remove(balkjeplaylist2)
+        Shapes.Remove(balkjeplaylist3)
+        Shapes.Remove(balkjeplaylist4)
+        Shapes.Remove(playtext)    
+        Shapes.Remove(PLN1) 
+        shapes.Remove(PlN12)
+        Shapes.Remove(PLN2)
+        Shapes.Remove(PLN22)
+        Shapes.Remove(PLN3)
+        Shapes.Remove(PLN32)
+        Shapes.Remove(PLN4)
+        Shapes.Remove(PLN42)
+        makeplaylist()
+      EndIf     
+    EndIf
+    
+    '2 playlistknop in ddmenu
+    If d = 1 And val =  2 Then
+      w11 = 203
+      h11 = 30
+      x11 = 139.5
+      y11 = 144.25
+      y112 = 193.5
+      y113 = 242.75
+      If (mx > x11 And mx < x11 + w11 And my > y11 And my < y11 + h11 And c <> 1 And e <> 1)Then
+        Shapes.Zoom(balkjeplaylist1, 0.97, 0.97)
+        Shapes.Remove(scrolldrie2)
+        Shapes.Remove(balkjeplaylist1)
+        Shapes.Remove(balkjeplaylist2)
+        Shapes.Remove(balkjeplaylist3)
+        Shapes.Remove(balkjeplaylist4)
+        Shapes.Remove(playtext)    
+        Shapes.Remove(PLN1) 
+        shapes.Remove(PlN12)
+        Shapes.Remove(PLN2)
+        Shapes.Remove(PLN22)
+        Shapes.Remove(PLN3)
+        Shapes.Remove(PLN32)
+        Shapes.Remove(PLN4)
+        Shapes.Remove(PLN42)
+        playlistnaam2()
+      EndIf 
+      If (mx > x11 And mx < x11 + w11 And my > y112 And my < y112 + h11 And c <> 1 And e <> 1)Then
+        Shapes.Zoom(balkjeplaylist2, 0.97, 0.97)
+        Shapes.Remove(scrolldrie2)
+        Shapes.Remove(balkjeplaylist1)
+        Shapes.Remove(balkjeplaylist2)
+        Shapes.Remove(balkjeplaylist3)
+        Shapes.Remove(balkjeplaylist4)
+        Shapes.Remove(playtext)    
+        Shapes.Remove(PLN1) 
+        shapes.Remove(PlN12)
+        Shapes.Remove(PLN2)
+        Shapes.Remove(PLN22)
+        Shapes.Remove(PLN3)
+        Shapes.Remove(PLN32)
+        Shapes.Remove(PLN4)
+        Shapes.Remove(PLN42)
+        playlistnaam1()
+      EndIf
+      If (mx > x11 And mx < x11 + w11 And my > y113 And my < y113 + h11 And c <> 1 And e <> 1)Then
+        Shapes.Zoom(balkjeplaylist3, 0.97, 0.97)
+        Shapes.Remove(scrolldrie2)
+        Shapes.Remove(balkjeplaylist1)
+        Shapes.Remove(balkjeplaylist2)
+        Shapes.Remove(balkjeplaylist3)
+        Shapes.Remove(balkjeplaylist4)
+        Shapes.Remove(playtext)    
+        Shapes.Remove(PLN1) 
+        shapes.Remove(PlN12)
+        Shapes.Remove(PLN2)
+        Shapes.Remove(PLN22)
+        Shapes.Remove(PLN3)
+        Shapes.Remove(PLN32)
+        Shapes.Remove(PLN4)
+        Shapes.Remove(PLN42)
+        makeplaylist()
+      EndIf      
+    EndIf
+    
+    '3 playlistknop in ddmenu
+    If d = 1 And val =  3 Then
+      w12 = 203
+      h12 = 30
+      x12 = 139.5
+      y12 = 146
+      y122 = 197
+      y123 = 248
+      y124 = 299
+      If (mx > x12 And mx < x12 + w12 And my > y12 And my < y12 + h12 And c <> 1 And e <> 1)Then
+        Shapes.Zoom(balkjeplaylist1, 0.97, 0.97)
+        Shapes.Remove(scrollvier2)
+        Shapes.Remove(balkjeplaylist1)
+        Shapes.Remove(balkjeplaylist2)
+        Shapes.Remove(balkjeplaylist3)
+        Shapes.Remove(balkjeplaylist4)
+        Shapes.Remove(playtext)    
+        Shapes.Remove(PLN1) 
+        shapes.Remove(PlN12)
+        Shapes.Remove(PLN2)
+        Shapes.Remove(PLN22)
+        Shapes.Remove(PLN3)
+        Shapes.Remove(PLN32)
+        Shapes.Remove(PLN4)
+        Shapes.Remove(PLN42)
+        playlistnaam3()
+      EndIf 
+      If (mx > x12 And mx < x12 + w12 And my > y122 And my < y122 + h12 And c <> 1 And e <> 1)Then
+        Shapes.Zoom(balkjeplaylist2, 0.97, 0.97)
+        Shapes.Remove(scrollvier2)
+        Shapes.Remove(balkjeplaylist1)
+        Shapes.Remove(balkjeplaylist2)
+        Shapes.Remove(balkjeplaylist3)
+        Shapes.Remove(balkjeplaylist4)
+        Shapes.Remove(playtext)    
+        Shapes.Remove(PLN1) 
+        shapes.Remove(PlN12)
+        Shapes.Remove(PLN2)
+        Shapes.Remove(PLN22)
+        Shapes.Remove(PLN3)
+        Shapes.Remove(PLN32)
+        Shapes.Remove(PLN4)
+        Shapes.Remove(PLN42)
+        playlistnaam2()
+      EndIf
+      If (mx > x12 And mx < x12 + w12 And my > y123 And my < y123 + h12 And c <> 1 And e <> 1)Then
+        Shapes.Zoom(balkjeplaylist3, 0.97, 0.97) 
+        Shapes.Remove(scrollvier2)
+        Shapes.Remove(balkjeplaylist1)
+        Shapes.Remove(balkjeplaylist2)
+        Shapes.Remove(balkjeplaylist3)
+        Shapes.Remove(balkjeplaylist4)
+        Shapes.Remove(playtext)    
+        Shapes.Remove(PLN1) 
+        shapes.Remove(PlN12)
+        Shapes.Remove(PLN2)
+        Shapes.Remove(PLN22)
+        Shapes.Remove(PLN3)
+        Shapes.Remove(PLN32)
+        Shapes.Remove(PLN4)
+        Shapes.Remove(PLN42)
+        playlistnaam1()  
+      EndIf
+      If (mx > x12 And mx < x12 + w12 And my > y124 And my < y124 + h12 And c <> 1 And e <> 1)Then
+        Shapes.Zoom(balkjeplaylist4, 0.97, 0.97)
+        Shapes.Remove(scrollvier2)
+        Shapes.Remove(balkjeplaylist1)
+        Shapes.Remove(balkjeplaylist2)
+        Shapes.Remove(balkjeplaylist3)
+        Shapes.Remove(balkjeplaylist4)
+        Shapes.Remove(playtext)    
+        Shapes.Remove(PLN1) 
+        shapes.Remove(PlN12)
+        Shapes.Remove(PLN2)
+        Shapes.Remove(PLN22)
+        Shapes.Remove(PLN3)
+        Shapes.Remove(PLN32)
+        Shapes.Remove(PLN4)
+        Shapes.Remove(PLN42)
+        makeplaylist()
+      EndIf      
+    EndIf
+
+   '4 playlists in dd menu
+    If d = 1 And val =  4 Then
+      w12 = 203
+      h12 = 30
+      x12 = 139.5
+      y12 = 146
+      y122 = 197
+      y123 = 248
+      y124 = 299
+      If (mx > x12 And mx < x12 + w12 And my > y12 And my < y12 + h12 And c <> 1 And e <> 1)Then
+        Shapes.Zoom(balkjeplaylist1, 0.97, 0.97)
+        Shapes.Remove(scrollvier2)
+        Shapes.Remove(balkjeplaylist1)
+        Shapes.Remove(balkjeplaylist2)
+        Shapes.Remove(balkjeplaylist3)
+        Shapes.Remove(balkjeplaylist4)
+        Shapes.Remove(playtext)    
+        Shapes.Remove(PLN1) 
+        shapes.Remove(PlN12)
+        Shapes.Remove(PLN2)
+        Shapes.Remove(PLN22)
+        Shapes.Remove(PLN3)
+        Shapes.Remove(PLN32)
+        Shapes.Remove(PLN4)
+        Shapes.Remove(PLN42)
+        playlistnaam4()
+      EndIf 
+      If (mx > x12 And mx < x12 + w12 And my > y122 And my < y122 + h12 And c <> 1 And e <> 1)Then
+        Shapes.Zoom(balkjeplaylist2, 0.97, 0.97)
+        Shapes.Remove(scrollvier2)
+        Shapes.Remove(balkjeplaylist1)
+        Shapes.Remove(balkjeplaylist2)
+        Shapes.Remove(balkjeplaylist3)
+        Shapes.Remove(balkjeplaylist4)
+        Shapes.Remove(playtext)    
+        Shapes.Remove(PLN1) 
+        shapes.Remove(PlN12)
+        Shapes.Remove(PLN2)
+        Shapes.Remove(PLN22)
+        Shapes.Remove(PLN3)
+        Shapes.Remove(PLN32)
+        Shapes.Remove(PLN4)
+        Shapes.Remove(PLN42)
+        playlistnaam3()
+      EndIf
+      If (mx > x12 And mx < x12 + w12 And my > y123 And my < y123 + h12 And c <> 1 And e <> 1)Then
+        Shapes.Zoom(balkjeplaylist3, 0.97, 0.97) 
+        Shapes.Remove(scrollvier2)
+        Shapes.Remove(balkjeplaylist1)
+        Shapes.Remove(balkjeplaylist2)
+        Shapes.Remove(balkjeplaylist3)
+        Shapes.Remove(balkjeplaylist4)
+        Shapes.Remove(playtext)    
+        Shapes.Remove(PLN1) 
+        shapes.Remove(PlN12)
+        Shapes.Remove(PLN2)
+        Shapes.Remove(PLN22)
+        Shapes.Remove(PLN3)
+        Shapes.Remove(PLN32)
+        Shapes.Remove(PLN4)
+        Shapes.Remove(PLN42)
+        playlistnaam2()  
+      EndIf
+      If (mx > x12 And mx < x12 + w12 And my > y124 And my < y124 + h12 And c <> 1 And e <> 1)Then
+        Shapes.Zoom(balkjeplaylist4, 0.97, 0.97)
+        Shapes.Remove(scrollvier2)
+        Shapes.Remove(balkjeplaylist1)
+        Shapes.Remove(balkjeplaylist2)
+        Shapes.Remove(balkjeplaylist3)
+        Shapes.Remove(balkjeplaylist4)
+        Shapes.Remove(playtext)    
+        Shapes.Remove(PLN1) 
+        shapes.Remove(PlN12)
+        Shapes.Remove(PLN2)
+        Shapes.Remove(PLN22)
+        Shapes.Remove(PLN3)
+        Shapes.Remove(PLN32)
+        Shapes.Remove(PLN4)
+        Shapes.Remove(PLN42)
+        playlistnaam1() 
+      EndIf      
+    EndIf
+    
+    ''Top 10 button 
+    w13 = 155
+    h13 = 44
+    x13 = 436.5
+    y13 = 30
+    If (mx > x13 And mx < x13 + w13 And my > y13 And my < y13 + h13 And c <> 1 and d <> 1 And e <> 1)Then
+      Shapes.Zoom(buttontop102, 0.97, 0.97)
+      Shapes.Remove(PLNN11)
+      Shapes.Remove(PLNN113)
+      Shapes.Remove(PLNN12)
+      Shapes.Remove(PLNN123)
+      Shapes.Remove(PLNN13)
+      Shapes.Remove(PLNN133)
+      Shapes.Remove(PLNN14)
+      Shapes.Remove(PLNN143)
+      GraphicsWindow.FontName = "Georgia"
+      GraphicsWindow.FontSize = 24
+      GraphicsWindow.BrushColor = "#203864"
+      Top10text = Shapes.AddText("Top 10")
+      x15 = 195 - ((Text.GetLength(Top10text)/2) * 16)
+      Shapes.Move(Top10text, x15, 290)
+      f = 5
+      
+     Sound.Stop(currentSong)
+     Sound.Stop(contents[selectionPosition])
+     nummertjes =  Array.GetAllIndices(playData)
+     currentSong = (nummertjes[Array.GetItemCount(playData)])
+     Sound.Play(currentSong)
+     
+     Shapes.Remove(nummer)
+     Shapes.Remove(Top10text3[lol])
+     
+     tempText = nummertjes[Array.GetItemCount(playData)]
+      While Text.IsSubText(tempText, "\") 
+        tempText = Text.GetSubText(tempText, Text.GetIndexOf(tempText, "\") + 1 , 100)
+      EndWhile
+     tempText = Text.GetSubText(tempText, 1, Text.GetLength(tempText) - 4)
+     Controls.SetTextBoxText(grapje, temptext )
+     groepje = Controls.GetTextBoxText(grapje)
+     GraphicsWindow.FontName = "Georgia"
+     GraphicsWindow.FontSize = 16
+     GraphicsWindow.BrushColor = "#203864"
+      If text.GetLength(groepje) > 42 Then
+       temptext3 = text.GetSubText(groepje, 1 , 40)
+       nummer = Shapes.AddText(temptext3+ "..")
+      Else
+       nummer = Shapes.AddText(groepje)
+      EndIf
+      Shapes.Move(nummer, 155, 465)
+    EndIf
+    
+    ''top 10 per nummer
+    For i = 1 To 10
+      w14 = 235
+      h14 = 26
+      x14 = 396.5
+      y14 = (i*31.5) + 55
+       If (mx > x14 And mx < x14 + w14 And my > y14 And my < y14 + h14 And c <> 1 And e <> 1 And k <> 1)Then
+         Shapes.Zoom(balkjetop102[i], 0.97, 0.97)
+         Shapes.Remove(PLNN11)
+         Shapes.Remove(PLNN113)
+         Shapes.Remove(PLNN12)
+         Shapes.Remove(PLNN123)
+         Shapes.Remove(PLNN13)
+         Shapes.Remove(PLNN133)
+         Shapes.Remove(PLNN14)
+         Shapes.Remove(PLNN143)
+         
+         f = 5
+         top10playlist()
+         
+         Timer.Interval = 5000
+         Timer.Tick = Ontick
+      EndIf
+    EndFor
+   
+   
+    'musiclistknop
+    y61 = 175
+    If (mx > x6 And mx < x6 + w6 And my > y61 And my < y61 + h6 And c <> 1 and d <> 1 And e <> 1 And k <> 1)Then
+      Shapes.Zoom(musiclist2, 0.97, 0.97)
+      createMusiclist()
+      e = 1  
+    EndIf
+    
+    'If (e = 1) Then
+    '  CODE VOOR KNOPPEN MUSICLIST 
+    'EndIf
+    If mx > 160 And mx < 185 And my > 245 And my < 270 And e = 1  Then
+      selectionPosition = selectionPosition - 1
+      If selectionPosition < 1 Then
+        selectionPosition = amountSongs
+      EndIf
+      removeMusicList()
+      createMusiclist()
+    EndIf
+    If mx > 160 And mx < 185 And my > 300 And my < 325 And e = 1 Then
+      selectionPosition = selectionPosition + 1
+      If selectionPosition > amountSongs Then
+        selectionPosition = 1
+      EndIf
+      removeMusicList()
+      createMusiclist()
+    EndIf
+    If mx > 175 And mx < 215 And my > 475 And my < 515 And e = 1 Then
+       ''TextWindow.WriteLine("CLICKED PLUS")
+    EndIf
+    If mx > 225 And mx < 265 And my > 475 And my < 515 And e = 1 Then
+        ''TextWindow.WriteLine("CLICKED MIN")
+    EndIf
+    
+    'selected playlist button
+    y62 = 275
+    If (mx > x6 And mx < x6 + w6 And my > y62 And my < y62 + h6 And c <> 1 and d <> 1 And e <> 1 And g <> 1 and k <> 1 And Mouse.IsLeftButtonDown)Then
+      Shapes.Zoom(emptyplaylist2, 0.97, 0.97)
+      selectedplaylist()
+    ElseIf (mx > x6 And mx < x6 + w6 And my > y62 And my < y62 + h6 And c <> 1 and d <> 1 And e <> 1 and g <> 1 and k <> 1 And Mouse.IsRightButtonDown)Then
+      deleteplaylist()
+    EndIf
+    
+    ''binnen het gebied van ddmenu deleteplaylist
+    w21 = 203
+    h21 = 30
+    x21 = 139.5
+    y21 = 332.5
+    
+    '' TODO ANCHOR
+    If (mx > x21 And mx < x21 + w21 And my > y21 And my < y21 + h21 And c <> 1 and d <> 1 And e <> 1 And f = 1 And g = 1)Then
+      Shapes.Zoom(deleteplaylist2, 0.97, 0.97)
+
+      
+      TextWindow.WriteLine("removeing PLNN entry")
+      indices = Array.GetAllIndices(PLNN)
+      temp = ""
+      arrayCount = 1
+      For loopCounter = 1 To Array.GetItemCount(indices)
+        If loopCounter <> 1 Then
+          temp[arrayCount] = PLNN[indices[loopCounter]]
+          arrayCount = arrayCount + 1  
+        EndIf
+      EndFor   
+      PLNN = temp
+        
+        
+      TextWindow.WriteLine("removeing playlists entry")
+      temp = ""
+      arrayCount = 1
+      For loopCounter = 1 To Array.GetItemCount(playlists)
+        If loopCounter <> 1 Then
+          temp[arrayCount] = playlists[loopCounter]
+          arrayCount = arrayCount + 1
+        EndIf
+      EndFor   
+      playlists = temp
+        
+      TextWindow.WriteLine("Playlists")
+      For loopCounter = 1 To Array.GetItemCount(playlists)
+        TextWindow.WriteLine(loopCounter + ": " + playlists[loopCounter])
+      EndFor
+      TextWindow.WriteLine("PLNN")
+      For loopCounter = 1 To Array.GetItemCount(playlists)
+        TextWindow.WriteLine(loopCounter + ": " + PLNN[loopCounter])
+      EndFor
+      
+      val = val -1
+      Shapes.Remove(PLNN11)
+      Shapes.Remove(PLNN113)
+      f = 0
+    EndIf
+    If (mx > x21 And mx < x21 + w21 And my > y21 And my < y21 + h21 And c <> 1 and d <> 1 And e <> 1 And f = 2 And g = 1)Then
+      Shapes.Zoom(deleteplaylist2, 0.97, 0.97)
+      
+      
+      TextWindow.WriteLine("removeing PLNN entry")
+      indices = Array.GetAllIndices(PLNN)
+      temp = ""
+      arrayCount = 1
+      For loopCounter = 1 To Array.GetItemCount(indices)
+        If loopCounter <> 2 Then
+          temp[arrayCount] = PLNN[indices[loopCounter]]
+          arrayCount = arrayCount + 1  
+        EndIf
+      EndFor   
+      PLNN = temp
+        
+        
+      TextWindow.WriteLine("removeing playlists entry")
+      temp = ""
+      arrayCount = 1
+      For loopCounter = 1 To Array.GetItemCount(playlists)
+        If loopCounter <> 2 Then
+          temp[arrayCount] = playlists[loopCounter]
+          arrayCount = arrayCount + 1
+        EndIf
+      EndFor   
+      playlists = temp
+        
+      TextWindow.WriteLine("Playlists")
+      For loopCounter = 1 To Array.GetItemCount(playlists)
+        TextWindow.WriteLine(loopCounter + ": " + playlists[loopCounter])
+      EndFor
+      TextWindow.WriteLine("PLNN")
+      For loopCounter = 1 To Array.GetItemCount(playlists)
+        TextWindow.WriteLine(loopCounter + ": " + PLNN[loopCounter])
+      EndFor
+      
+      val = val -1
+      Shapes.Remove(PLNN12)
+      Shapes.Remove(PLNN123)
+      f = 0
+    EndIf
+    If (mx > x21 And mx < x21 + w21 And my > y21 And my < y21 + h21 And c <> 1 and d <> 1 And e <> 1 And f = 3 And g = 1)Then
+      Shapes.Zoom(deleteplaylist2, 0.97, 0.97)
+
+      
+      TextWindow.WriteLine("removeing PLNN entry")
+      indices = Array.GetAllIndices(PLNN)
+      temp = ""
+      arrayCount = 1
+      For loopCounter = 1 To Array.GetItemCount(indices)
+        If loopCounter <> 3 Then
+          temp[arrayCount] = PLNN[indices[loopCounter]]
+          arrayCount = arrayCount + 1  
+        EndIf
+      EndFor   
+      PLNN = temp
+        
+        
+      TextWindow.WriteLine("removeing playlists entry")
+      temp = ""
+      arrayCount = 1
+      For loopCounter = 1 To Array.GetItemCount(playlists)
+        If loopCounter <> 3 Then
+          temp[arrayCount] = playlists[loopCounter]
+          arrayCount = arrayCount + 1
+        EndIf
+      EndFor   
+      playlists = temp
+        
+      TextWindow.WriteLine("Playlists")
+      For loopCounter = 1 To Array.GetItemCount(playlists)
+        TextWindow.WriteLine(loopCounter + ": " + playlists[loopCounter])
+      EndFor
+      TextWindow.WriteLine("PLNN")
+      For loopCounter = 1 To Array.GetItemCount(playlists)
+        TextWindow.WriteLine(loopCounter + ": " + PLNN[loopCounter])
+      EndFor
+      
+      val = val - 1
+      Shapes.Remove(PLNN13)
+      Shapes.Remove(PLNN133)
+      f = 0
+    EndIf
+    If (mx > x21 And mx < x21 + w21 And my > y21 And my < y21 + h21 And c <> 1 and d <> 1 And e <> 1  And f = 4 And g = 1)Then
+      Shapes.Zoom(deleteplaylist2, 0.97, 0.97)
+
+      
+      TextWindow.WriteLine("removeing PLNN entry")
+      indices = Array.GetAllIndices(PLNN)
+      temp = ""
+      arrayCount = 1
+      For loopCounter = 1 To Array.GetItemCount(indices)
+        If loopCounter <> 4 Then
+          temp[arrayCount] = PLNN[indices[loopCounter]]
+          arrayCount = arrayCount + 1  
+        EndIf
+      EndFor   
+      PLNN = temp
+        
+        
+      TextWindow.WriteLine("removeing playlists entry")
+      temp = ""
+      arrayCount = 1
+      For loopCounter = 1 To Array.GetItemCount(playlists)
+        If loopCounter <> 4 Then
+          temp[arrayCount] = playlists[loopCounter]
+          arrayCount = arrayCount + 1
+        EndIf
+      EndFor   
+      playlists = temp
+        
+      TextWindow.WriteLine("Playlists")
+      For loopCounter = 1 To Array.GetItemCount(playlists)
+        TextWindow.WriteLine(loopCounter + ": " + playlists[loopCounter])
+      EndFor
+      TextWindow.WriteLine("PLNN")
+      For loopCounter = 1 To Array.GetItemCount(playlists)
+        TextWindow.WriteLine(loopCounter + ": " + PLNN[loopCounter])
+      EndFor
+      
+      val = val -1
+      Shapes.Remove(PLNN14)
+      Shapes.Remove(PLNN143)
+      f = 0
+    EndIf
+
+    'Ok button bij nieuwe playlist
+    w9 = 103
+    h9 = 49
+    x9 = 471
+    y9 = 333
+    If mx > x9 And mx < x9 + w9 And my > y9 And my < y9 + h9 And c = 1 Then
+      Shapes.Zoom(OK2, 0.91, 0.91)
+      val = val + 1
+      PLNN[val] = Controls.GetTextBoxText(PLN)
+      If PLNN[val] = "" Then
+        val = val - 1
+        GraphicsWindow.ShowMessage("Please Enter a Name", "Error Code #00001")
+      EndIf
+      Shapes.Remove(OK2)
+      Shapes.Remove(name2)
+      Shapes.Remove(PLN)
+      c = 0
+    EndIf
+    
+    'Plusknop
+    w19 = 40
+    h19 = 42
+    x19 = 130
+    y19 = 375
+    ''If (mx > x19 And mx < x19 + w19 And my > y19 And my < y19 + h19 And c <> 1 And d <> 1 and e <> 1)Then
+     '' Shapes.Zoom(plus2, 0.95, 0.95)
+    ''EndIf
+    
+    'min knop
+    w20 = 40
+    h20 = 41
+    x20 = 220
+    y20 = 375
+   '' If (mx > x20 And mx < x20 + w20 And my > y20 And my < y20 + h20 And c <> 1 And d <> 1 and e <> 1)Then
+      ''Shapes.Zoom(min2, 0.95, 0.95)
+   '' EndIf 
+   
+   '' volumeslider
+    While Mouse.IsLeftButtonDown And my < 660 And my > 455 And mx > 36.5 And mx < 81.5  
+      Shapes.Move(sliderbutton2, 36.5, my - 10)
+    EndWhile
+    volumechange()
+   
+    ''folder button
+    w22 = 35
+    h22 = 35
+    x22 = 650
+    y22 = 600
+    If (mx > x22 And mx < x22 + w22 And my > y22 And my < y22 + h22 And c <> 1 And d <> 1 and e <> 1 And g <> 1)Then
+      Shapes.Zoom(folder2, 0.95, 0.95)
+    EndIf
+    
+    
+    'print button
+    w23 = 32
+    h23 = 35
+    x23 = 650
+    y23 = 650
+    
+    ''volledige muzieklijst printen
+    If (mx > x23 And mx < x23 + w23 And my > y23 And my < y23 + h23 And c <> 1 And d <> 1 and e <> 1 And g <> 1 And f = 0)Then
+      Shapes.Zoom(print2, 0.95, 0.95)
+      fp1 = fp + "listmp3.txt"
+      For position = 1 To Array.GetItemCount(contents)
+       tempText = contents[position]
+       While Text.IsSubText(tempText, "\") 
+         tempText = Text.GetSubText(tempText, Text.GetIndexOf(tempText, "\") + 1 , 100)
+       EndWhile
+       contents[position] = tempText
+     EndFor
+     File.WriteContents(fp1, "")
+     For i =  1 To Array.GetItemCount(contents)
+       File.WriteLine(fp1,i, contents[i])
+     EndFor
+     LDFile.PrintFile(fp1)
+   EndIf
+   
+   ''1e playlist printen
+   If (mx > x23 And mx < x23 + w23 And my > y23 And my < y23 + h23 And c <> 1 And d <> 1 and e <> 1 And g <> 1 And f = 1)Then
+     Shapes.Zoom(print2, 0.95, 0.95)
+     fp3 = fp + "Playlist1.txt"
+     For position = 1 To Array.GetItemCount(playlists[1])
+       tempText = playlists[1][position]
+       While Text.IsSubText(tempText, "\") 
+         tempText = Text.GetSubText(tempText, Text.GetIndexOf(tempText, "\") + 1 , 100)
+       EndWhile
+       Playlist1contents[position] = tempText
+     EndFor
+     File.WriteContents(fp3, "")
+     For i =  1 To Array.GetItemCount(playlists[1])
+       File.WriteLine(fp3,i, Playlist1contents[i])
+     EndFor
+     LDFile.PrintFile(fp3)
+   EndIf
+   
+   ''2d playlist printen
+    If (mx > x23 And mx < x23 + w23 And my > y23 And my < y23 + h23 And c <> 1 And d <> 1 and e <> 1 And g <> 1 And f = 2)then
+     Shapes.Zoom(print2, 0.95, 0.95)
+     fp4 = fp + "Playlist2.txt"
+     For position = 1 To Array.GetItemCount(playlists[2])
+       tempText = playlists[2][position]
+       While Text.IsSubText(tempText, "\") 
+         tempText = Text.GetSubText(tempText, Text.GetIndexOf(tempText, "\") + 1 , 100)
+       EndWhile
+       Playlist2contents[position] = tempText
+     EndFor
+     File.WriteContents(fp4, "")
+     For i =  1 To Array.GetItemCount(playlists[2])
+       File.WriteLine(fp4,i, Playlist2contents[i])
+     EndFor
+     LDFile.PrintFile(fp4)
+   EndIf
+   
+   '3e lijst print
+   If (mx > x23 And mx < x23 + w23 And my > y23 And my < y23 + h23 And c <> 1 And d <> 1 and e <> 1 And g <> 1 And f = 3)then
+     fp5 = fp + "Playlist3.txt"
+     For position = 1 To Array.GetItemCount(playlists[3])
+       tempText = playlists[3][position]
+       While Text.IsSubText(tempText, "\") 
+         tempText = Text.GetSubText(tempText, Text.GetIndexOf(tempText, "\") + 1 , 100)
+       EndWhile
+       Playlist3contents[position] = tempText
+     EndFor
+     File.WriteContents(fp5, "")
+     For i =  1 To Array.GetItemCount(playlists[3])
+       File.WriteLine(fp5,i, Playlist3contents[i])
+     EndFor
+     LDFile.PrintFile(fp5)
+   EndIf
+   
+   '4e lijst print
+   If (mx > x23 And mx < x23 + w23 And my > y23 And my < y23 + h23 And c <> 1 And d <> 1 and e <> 1 And g <> 1 And f = 4)then
+     Shapes.Zoom(print2, 0.95, 0.95)
+     fp6 = fp + "Playlist3.txt"
+     For position = 1 To Array.GetItemCount(playlists[4])
+       tempText = playlists[4][position]
+       While Text.IsSubText(tempText, "\") 
+         tempText = Text.GetSubText(tempText, Text.GetIndexOf(tempText, "\") + 1 , 100)
+       EndWhile
+       Playlist4contents[position] = tempText
+     EndFor
+     File.WriteContents(fp6, "")
+     For i =  1 To Array.GetItemCount(playlists[4])
+       File.WriteLine(fp6,i, Playlist4contents[i])
+     EndFor
+     LDFile.PrintFile(fp6)
+   EndIf
+   
+   'top10lijstprint
+   If (mx > x23 And mx < x23 + w23 And my > y23 And my < y23 + h23 And c <> 1 And d <> 1 and e <> 1 And g <> 1 And f = 5)then
+     Shapes.Zoom(print2, 0.95, 0.95)
+     fp7 = fp + "PlaylistTop10.txt"
+     File.WriteContents(fp7, "")
+     For count = 1 To 10
+       File.WriteLine(fp7, count, count+". "+ textje[count])
+     EndFor
+     LDFile.PrintFile(fp7)
+   EndIf
+  EndIf
+EndWhile
+
+
+
+
+Sub mousemove ''mousemove zorgt ervoor dat de buttons een beetje gezoomd worden als je met de muis er overheen gaat. geen functionaliteit
+  mx = GraphicsWindow.MouseX 
+  my = GraphicsWindow.MouseY
+  
+  '' muispositie buiten gebied van musicborder (gaat weg) bij musiclist
+  If (mx < 60 Or (mx < 130 And my < 175) Or (mx < 130 And my > 235) or mx > 614 Or my < 100 Or my > 550 And e = 1) Then
+    removeMusicList()
+    e = 0
+  EndIf
+  
+  '' muispositie buiten gebied van musicborder (gaat weg) bij selectedplaylist
+  If (mx < 60 Or (mx < 130 And my < 275) Or (mx < 130 And my > 335) Or mx > 614 Or my < 100 Or my > 550 And h = 1) Then
+    Shapes.Remove(musicborder3)
+    k = 0
+  EndIf
+  
+  'playlistsdrop buiten het gebied van het dropdown menuutje (ddmenu gaat weg)
+  If (mx < 60 Or (mx > 347 And my < 125) Or mx > 362 Or (mx < 120 And my > 155) Or my < 75 Or my > 182 And val = 0)Then
+    Shapes.Remove(scrolleen2)
+    Shapes.Remove(balkjeplaylist1)
+    Shapes.Remove(playtext)
+    d = 0
+  EndIf
+  If (mx < 60 Or (mx > 330 And my < 125) Or mx > 362 Or (mx < 120 And my > 155) Or my < 75 Or my > 238 And val = 1)Then
+    Shapes.Remove(scrolltwee2)
+    Shapes.Remove(balkjeplaylist1)
+    Shapes.Remove(balkjeplaylist2)
+    Shapes.Remove(playtext)    
+    Shapes.Remove(PLN1) 
+    Shapes.Remove(PLN12)
+    d = 0
+  EndIf
+  If (mx < 60 Or (mx > 330 And my < 125) Or mx > 362 Or (mx < 120 And my > 155) Or my < 75 Or my > 292 And val = 2)Then
+    Shapes.Remove(scrolldrie2)
+    Shapes.Remove(balkjeplaylist1)
+    Shapes.Remove(balkjeplaylist2)
+    Shapes.Remove(balkjeplaylist3)
+    Shapes.Remove(playtext)    
+    Shapes.Remove(PLN1) 
+    shapes.Remove(PlN12)
+    Shapes.Remove(PLN2)
+    Shapes.Remove(PLN22)
+    d = 0
+  EndIf
+  If (mx < 60 Or (mx > 330 And my < 125) Or mx > 362 Or (mx < 120 And my > 155) Or my < 75 Or my > 350 And val = 3)Then
+    Shapes.Remove(scrollvier2)
+    Shapes.Remove(balkjeplaylist1)
+    Shapes.Remove(balkjeplaylist2)
+    Shapes.Remove(balkjeplaylist3)
+    Shapes.Remove(balkjeplaylist4)
+    Shapes.Remove(playtext)    
+    Shapes.Remove(PLN1) 
+    shapes.Remove(PlN12)
+    Shapes.Remove(PLN2)
+    Shapes.Remove(PLN22)
+    Shapes.Remove(PLN3)
+    Shapes.Remove(PLN32)
+    d = 0
+  EndIf
+  If (mx < 60 Or (mx > 330 And my < 125) Or mx > 362 Or (mx < 120 And my > 155) Or my < 75 Or my > 350 And val = 4)Then
+    Shapes.Remove(scrollvier2)
+    Shapes.Remove(balkjeplaylist1)
+    Shapes.Remove(balkjeplaylist2)
+    Shapes.Remove(balkjeplaylist3)
+    Shapes.Remove(balkjeplaylist4)
+    Shapes.Remove(playtext)    
+    Shapes.Remove(PLN1) 
+    shapes.Remove(PlN12)
+    Shapes.Remove(PLN2)
+    Shapes.Remove(PLN22)
+    Shapes.Remove(PLN3)
+    Shapes.Remove(PLN32)
+    Shapes.Remove(PLN4)
+    Shapes.Remove(PLN42)
+    d = 0
+  EndIf
+  
+  '
+ 
+  'buiten het gebied van dropdownmenu deleteplaylist
+  If (mx < 60 Or (mx > 330 And my < 320) Or mx > 362 Or (mx < 120 And my > 335) Or my < 275 Or my > 377 And g = 1)Then
+    Shapes.Remove(scrolleen22)
+    Shapes.Remove(deleteplaylist2)
+    Shapes.Remove(deletetext)
+    g = 0
+  EndIf
+EndSub
+
+
+Sub mousedown
+  mx = GraphicsWindow.MouseX 
+  my = GraphicsWindow.MouseY
+  
+  mouseclicked = "True"  
+EndSub
+
+
+Sub makeplaylist
+  c = 1
+  ''TextWindow.WriteLine("CALLED")
+  name2 = Shapes.AddImage(name)
+  OK2 = Shapes.AddImage(OK)
+  Shapes.Move(name2, 106, 250)
+  Shapes.Move(OK2, 471, 333)
+  GraphicsWindow.FontSize = 22
+  PLN = Controls.AddTextBox(145, 339)
+  Controls.SetSize(PLN, 315, 37)
+EndSub
+
+Sub playlistnaam1
+  f =  1
+  Shapes.Remove(PLNN11)
+  Shapes.Remove(PLNN113)
+  Shapes.Remove(PLNN12)
+  Shapes.Remove(PLNN123)
+  Shapes.Remove(PLNN13)
+  Shapes.Remove(PLNN133)
+  Shapes.Remove(PLNN14)
+  Shapes.Remove(PLNN143)
+  Shapes.Remove(Top10text)
+  GraphicsWindow.FontName = "Georgia"
+  GraphicsWindow.FontSize = 24
+  GraphicsWindow.BrushColor = "#203864" 
+  If Text.GetLength(PLNN[1]) < 17 Then  '' als text te lang wordt voor border. Subtext en ".." binnen de border
+    PLNN11 =  Shapes.AddText(PLNN[1])
+    x15 = 195 - ((Text.GetLength(PLNN[1])/2) * 14)
+    Shapes.Move(PLNN11, x15, 290)
+  EndIf
+  If Text.GetLength(PLNN[1]) > 17 Then
+    PLNN112 = Text.GetSubText(PLNN[1], 1, 15)
+    PLNN113 = Shapes.AddText(PLNN112 + "..")
+    Shapes.Move(PLNN113, 85, 290)
+  EndIf
+EndSub
+ 
+Sub playlistnaam2
+  f = 2
+  Shapes.Remove(PLNN11)
+  Shapes.Remove(PLNN113)
+  Shapes.Remove(PLNN12)
+  Shapes.Remove(PLNN123)
+  Shapes.Remove(PLNN13)
+  Shapes.Remove(PLNN133)
+  Shapes.Remove(PLNN14)
+  Shapes.Remove(PLNN143)
+  Shapes.Remove(Top10text)
+  GraphicsWindow.FontName = "Georgia"
+  GraphicsWindow.FontSize = 24
+  GraphicsWindow.BrushColor = "#203864" 
+  If Text.GetLength(PLNN[2]) < 17 Then
+    PLNN12 =  Shapes.AddText(PLNN[2])
+    x15 = 195 - ((Text.GetLength(PLNN[2])/2) * 14)
+    Shapes.Move(PLNN12, x15, 290)
+  EndIf
+  If Text.GetLength(PLNN[2]) > 17 Then
+    PLNN122 = Text.GetSubText(PLNN[2], 1, 15)
+    PLNN123 = Shapes.AddText(PLNN122 + "..")
+    Shapes.Move(PLNN123, 85, 290)
+  EndIf
+EndSub
+
+Sub playlistnaam3
+  f = 3
+  Shapes.Remove(PLNN11)
+  Shapes.Remove(PLNN113)
+  Shapes.Remove(PLNN12)
+  Shapes.Remove(PLNN123)
+  Shapes.Remove(PLNN13)
+  Shapes.Remove(PLNN133)
+  Shapes.Remove(PLNN14)
+  Shapes.Remove(PLNN143)
+  Shapes.Remove(Top10text)
+  GraphicsWindow.FontName = "Georgia"
+  GraphicsWindow.FontSize = 24
+  GraphicsWindow.BrushColor = "#203864" 
+  If Text.GetLength(PLNN[3]) < 17 Then
+    PLNN13 =  Shapes.AddText(PLNN[3])
+    x15 = 195 - ((Text.GetLength(PLNN[3])/2) * 14)
+    Shapes.Move(PLNN13, x15, 290)
+  EndIf
+  If Text.GetLength(PLNN[3]) > 17 Then
+    PLNN132 = Text.GetSubText(PLNN[3], 1, 15)
+    PLNN133 = Shapes.AddText(PLNN132 + "..")
+    Shapes.Move(PLNN133, 85, 290)
+  EndIf
+EndSub
+ 
+Sub playlistnaam4
+  f = 4
+  Shapes.Remove(PLNN11)
+  Shapes.Remove(PLNN113)
+  Shapes.Remove(PLNN12)
+  Shapes.Remove(PLNN123)
+  Shapes.Remove(PLNN13)
+  Shapes.Remove(PLNN133)
+  Shapes.Remove(PLNN14)
+  Shapes.Remove(PLNN143)
+  Shapes.Remove(Top10text)
+  GraphicsWindow.FontName = "Georgia"
+  GraphicsWindow.FontSize = 24
+  GraphicsWindow.BrushColor = "#203864" 
+  If Text.GetLength(PLNN[4]) < 17 Then
+    PLNN14 =  Shapes.AddText(PLNN[4])
+    x15 = 195 - ((Text.GetLength(PLNN[4])/2) * 14)
+    Shapes.Move(PLNN14, x15, 290)
+  EndIf
+  If Text.GetLength(PLNN[4]) > 17 Then
+    PLNN142 = Text.GetSubText(PLNN[4], 1, 15)
+    PLNN143 = Shapes.AddText(PLNN142 + "..")
+    Shapes.Move(PLNN143, 85, 290)
+  EndIf
+EndSub
+
+playlistSelectionPosition = 1
+Sub showPlaylist
+  GraphicsWindow.FontName = "Arial"
+  GraphicsWindow.FontSize = 16
+  GraphicsWindow.BrushColor = "#203864"
+  
+  Shapes.Remove(musicborder2)
+  musicborder2 = Shapes.AddImage(musicborder)
+  Shapes.Move(musicborder2, 130, 100)
+  
+  counter123 = 1
+  positionsDone = ""
+  amountSongs = Array.GetItemCount(playlists[f])
+  
+  temp = 11 - Math.Floor(amountSongs / 2)
+  For position = temp To temp + amountSongs - 1
+    tempPos = position + playlistSelectionPosition - 11
+
+    'TODO 1
+    
+    If tempPos > amountSongs Then
+      tempPos = tempPos - amountSongs
+    ElseIf tempPos < 1 Then 
+      tempPos = tempPos + amountSongs
+    EndIf
+    
+    positionsDone[counter123] = tempPos
+    counter123 = counter123 + 1
+    
+    tempText = playlists[f][tempPos]
+    While Text.IsSubText(tempText, "\") 
+      tempText = Text.GetSubText(tempText, Text.GetIndexOf(tempText, "\") + 1 , text.GetLength(tempText))
+    EndWhile
+    tempText = Text.GetSubText(tempText, 1, Text.GetLength(tempText) - 4)
+    
+    ''TextWindow.WriteLine(tempPos + ": " + tempText)    
+    musiclistText[position] = Shapes.AddText(tempText)
+    Shapes.Move(musiclistText[position], 210, 120 + position * 15)
+  EndFor 
+
+  Shapes.Remove(uparrow2)
+  uparrow2 = Shapes.AddImage(uparrow)
+  Shapes.Zoom(uparrow2 0.5, 0.5)
+  Shapes.Move(uparrow2, 160, 245)
+  
+  Shapes.Remove(selectionArrow2)
+  selectionArrow2 =  Shapes.AddImage(selectionArrow)
+  Shapes.Move(selectionArrow2, 175, 280)
+  
+  Shapes.Remove(downarrow2)
+  downarrow2 = Shapes.AddImage(downarrow)
+  Shapes.Zoom(downarrow2 0.5, 0.5)
+  Shapes.Move(downarrow2, 160, 300)  
+EndSub
+
+Sub selectedplaylist
+  If f = 0 Then
+    GraphicsWindow.ShowMessage("No playlist selected" , "Error#0002")
+  ElseIf f = 1 Then
+    k = 1
+    musicborder3 = Shapes.AddImage(musicborder)
+    Shapes.Move(musicborder3, 130, 100)
+    showPlaylist()
+  ElseIf f = 2 then
+    k = 1
+    musicborder3 = Shapes.AddImage(musicborder)
+    Shapes.Move(musicborder3, 130, 100)
+    showPlaylist()
+  ElseIf f = 3 then
+    k = 1
+    musicborder3 = Shapes.AddImage(musicborder)
+    Shapes.Move(musicborder3, 130, 100)
+    showPlaylist()
+  ElseIf f = 4 then
+    k = 1
+    musicborder3 = Shapes.AddImage(musicborder)
+    Shapes.Move(musicborder3, 130, 100)
+    showPlaylist()
+  Elseif f = 5 then
+    GraphicsWindow.ShowMessage("Playlist already shown", "Error#0004")
+  EndIf
+EndSub
+ 
+Sub deleteplaylist
+  If f = 0 Then
+    GraphicsWindow.ShowMessage("No playlist selected" , "Error#0002") 
+  ElseIf f > 0 and f < 5 then
+    g = 1
+    scrolleen22 = Shapes.AddImage(scrolleen)
+    deleteplaylist2 = Shapes.AddImage(balkjeplaylist)
+    Shapes.Move(scrolleen22, 120, 320)
+    Shapes.Move(deleteplaylist2, 139.5, 332.5)
+    GraphicsWindow.FontName = "Georgia"
+    GraphicsWindow.FontSize = 16
+    GraphicsWindow.BrushColor = "#203864"
+    deletetext = Shapes.AddText("Delete Playlist...")
+    Shapes.Move(deletetext, 146, 338)   
+  Elseif f = 5 then
+    GraphicsWindow.ShowMessage("Unchangeable playlist", "Error#0003")
+  EndIf
+EndSub
+
+Sub volumechange
+  j2 = Shapes.GetTop(sliderbutton2)
+  If j2 - j1 > 0 Then
+    stapjes = ((j2 - j1)/4)
+    For i = 1 To stapjes 
+      LDSound.Volume("Down")
+    EndFor
+  ElseIf j2 - j1 < 0 Then
+    stapjes2 = ((j2 - j1)/(-4))
+    For i = 1 To stapjes2 
+      LDSound.Volume("Up")
+    EndFor 
+  EndIf
+  j1 = j2
+EndSub
+  
+Sub removeMusicList
+  'remove all musiclist ui elements
+  Shapes.Remove(musicborder2)
+  Shapes.Remove(selectionArrow2)
+  Shapes.Remove(plus2)
+  Shapes.Remove(min2)
+  Shapes.Remove(uparrow2)
+  Shapes.Remove(downarrow2)
+  
+  removeEntriesMusiclist()
+  
+  For counter = 1 To Array.GetItemCount(addPlaylistButtons)
+    Shapes.Remove(addPlaylistButtonTexts[counter])
+    Shapes.Remove(addPlaylistButtons[counter])
+  EndFor
+EndSub
+
+Sub removeEntriesMusiclist
+  indices = Array.GetAllIndices(musiclistText)
+  For counter = 1 To Array.GetItemCount(indices)
+    Shapes.Remove(musiclistText[indices[counter]])
+  EndFor  
+EndSub
+
+Sub setupContents
+  folder = LDFile.MusicFolder
+  folders = LDFile.GetAllDirectories(folder)
+  files = File.GetFiles(folder)
+  For tracker = 1 To Array.GetItemCount(files)
+    contents[ubercount] = files[tracker]
+    ubercount = ubercount + 1
+  EndFor
+  
+  ''TextWindow.Show()
+  ''For counter = 1 To Array.GetItemCount(folders)
+  ''TextWindow.WriteLine(folders[counter])
+ '' EndFor
+  
+  ubercount = 1
+  For counter = 1 To Array.GetItemCount(folders)
+    files = File.GetFiles(folders[counter])
+    For tracker = 1 To Array.GetItemCount(files)
+      contents[ubercount] = files[tracker]
+      ubercount = ubercount + 1
+    EndFor
+  EndFor
+  'TextWindow.WriteLine(Array.GetItemCount(contents))'
+  sanitizeContents()
+EndSub
+
+Sub createMusiclist
+  GraphicsWindow.FontName = "Arial"
+  GraphicsWindow.FontSize = 16
+  GraphicsWindow.BrushColor = "#203864"
+  
+  Shapes.Remove(musicborder2)
+  musicborder2 = Shapes.AddImage(musicborder)
+  Shapes.Move(musicborder2, 130, 100)
+  
+  amountSongs = Array.GetItemCount(contents)
+  ''TextWindow.WriteLine("SONGS:")
+  
+  For position = 1 To 21
+    tempPos = position + selectionPosition - 11
+    
+    If tempPos > amountSongs Then
+      tempPos = tempPos - amountSongs
+    ElseIf tempPos < 1 Then 
+      tempPos = tempPos + amountSongs
+    EndIf
+       
+    tempText = contents[tempPos]
+    While Text.IsSubText(tempText, "\") 
+      tempText = Text.GetSubText(tempText, Text.GetIndexOf(tempText, "\") + 1 , text.GetLength(tempText))
+    EndWhile
+    tempText = Text.GetSubText(tempText, 1, Text.GetLength(tempText) - 4)
+    
+    'TextWindow.WriteLine(tempPos + ": " + tempText)    
+    musiclistText[position] = Shapes.AddText(tempText)
+    Shapes.Move(musiclistText[position], 210, 120 + position * 15)
+  EndFor 
+
+  'Place buttons for add to playlist, play from here etc
+  Shapes.Remove(plus2)
+  plus2 =  Shapes.AddImage(plus)
+  Shapes.Move(plus2, 175, 475)
+
+  Shapes.Remove(min2)
+  min2 = Shapes.AddImage(min)
+  Shapes.Move(min2, 225, 475)
+
+  Shapes.Remove(uparrow2)
+  uparrow2 = Shapes.AddImage(uparrow)
+  Shapes.Zoom(uparrow2 0.5, 0.5)
+  Shapes.Move(uparrow2, 160, 245)
+  
+  For counter = 1 To Array.GetItemCount(PLNN)
+    If (Array.ContainsValue(playlists[counter], contents[selectionPosition])) Then
+      GraphicsWindow.BrushColor = "Green"
+    Else
+      GraphicsWindow.BrushColor = "Black"
+    EndIf
+    addPlaylistButtons[counter] = Shapes.AddEllipse(50, 50)
+    Shapes.Move(addPlaylistButtons[counter], 275 + (55 * counter-1), 475)
+    GraphicsWindow.BrushColor = "White"
+    addPlaylistButtonTexts[counter] = Shapes.AddText("P" + counter)
+    Shapes.Move(addPlaylistButtonTexts[counter], 290 + (55 * counter-1), 490)
+    GraphicsWindow.PenColor = "Black"
+  EndFor
+  
+  'If (text.GetLength(PLNN[1]) > 0) Then
+  '  addPlaylist1Button = Controls.AddButton(PLNN[1], 100, 100)
+  'Else
+  '  addPlaylist1Button = Controls.AddButton("No playlist 1", 100, 100)
+  'EndIf
+  
+  Shapes.Remove(selectionArrow2)
+  selectionArrow2 =  Shapes.AddImage(selectionArrow)
+  Shapes.Move(selectionArrow2, 175, 280)
+  
+  Shapes.Remove(downarrow2)
+  downarrow2 = Shapes.AddImage(downarrow)
+  Shapes.Zoom(downarrow2 0.5, 0.5)
+  Shapes.Move(downarrow2, 160, 300)
+EndSub
+  
+Sub sanitizeContents
+  amountEntries = Array.GetItemCount(contents)
+  For count = 1 To amountEntries 
+    If Text.GetLength(contents[count]) < 1 Then
+      contents[count] = ""
+    EndIf
+    If (Text.EndsWith(contents[count], ".mp3") = "True" Or Text.EndsWith(contents[count], ".wav") = "True" Or Text.EndsWith(contents[count], ".wma") = "True") = "False" Then
+      contents[count] = ""
+    EndIf
+  EndFor
+  
+  contents[Array.GetItemCount(contents)] = ""
+  
+  indices = Array.GetAllIndices(contents)
+  For i = 1 To Array.GetItemCount(indices)
+    temp[i] = contents[indices[i]]
+  EndFor
+  contents = temp
+EndSub
+
+Sub Ontick
+  Timer.Pause()
+  If (Array.ContainsIndex(playData, currentSong)) Then
+    playData[currentSong] = playData[currentSong] + 1
+  Else
+    playData[currentSong] = 1
+  EndIf
+  top10fill()
+  Timer.Interval = 100000000
+  saveData()
+  ''TextWindow.WriteLine("ticked")
+EndSub
+
+Sub top10fill
+  For count = 1 To 10
+    If Array.ContainsIndex(top10Text2, count)Then 
+      Shapes.Remove(Top10text2[count])
+    EndIf
+ EndFor
+ 
+ playData = LDSort.ByValueWithIndex(playData)
+ indices = Array.GetAllIndices(playData)
+ saveData()
+'' TextWindow.WriteLine("Indices: ")
+
+If Array.GetItemCount(playData) < 11 Then 
+  arrayPosition = Array.GetItemCount(playData)
+Else
+  arrayPosition = 10
+EndIf
+
+If Array.GetItemCount(playData) > 10 Then
+ For count = Array.GetItemCount(playData) - 9 To Array.GetItemCount(playData) 
+   For i = Text.GetLength(indices[count]) to 1 step - 1
+     If (Text.GetSubText(indices[count], i , 1) = "\") Then
+       pos = i
+       i = 1
+     EndIf
+   EndFor
+   textje[arrayPosition] = text.GetSubText(indices[count], (pos + 1), text.GetLength(indices[count]) - pos - 4)
+   arrayPosition = arrayPosition - 1
+ EndFor
+Else 
+  For count = 1 To Array.GetItemCount(playData)
+     For i = Text.GetLength(indices[count]) to 1 step - 1
+     If (Text.GetSubText(indices[count], i , 1) = "\") Then
+       pos = i
+       i = 1
+     EndIf
+   EndFor
+   textje[arrayPosition] = text.GetSubText(indices[count], (pos + 1), text.GetLength(indices[count]) - pos - 4)
+   arrayPosition = arrayPosition - 1
+ EndFor
+EndIf
+   
+ GraphicsWindow.FontName = "Georgia"
+ GraphicsWindow.FontSize = 14
+ GraphicsWindow.BrushColor = "#203864"
+ 
+ ''TextWindow.WriteLine("INDICES: ")
+ For count = 1 To 10 
+   ''TextWindow.WriteLine(count + ", " + textje[count]+ ":"+ playData[indices[array.GetItemCount(playData) + 1 - count]])
+   If text.GetLength(textje[count]) > 30 Then
+     temptext2[count] = text.GetSubText(textje[count],1, 28)
+     Top10Text2[count] =  Shapes.AddText(temptext2[count] + "..")
+   Else
+     Top10Text2[count] = Shapes.AddText(textje[count])
+   EndIf
+   y15 = (count *(31.5)) + 60
+   Shapes.move(Top10text2[count], 405, y15)
+ EndFor
+EndSub
+
+Sub top10playlist
+  Sound.Stop(currentSong)
+  Sound.Stop(contents[selectionPosition])
+  Sound.Stop(nummertjes[lol])
+  Shapes.Remove(Top10text3[lol])
+  Shapes.Remove(nummer)
+  Shapes.Remove(Top10text)
+
+  nummertjes =  Array.GetAllIndices(playData)
+  currentSong = nummertjes[((Array.GetItemCount(playData) + 1) - i)]
+  Sound.Play(currentSong)
+  
+       
+  GraphicsWindow.FontName = "Georgia"
+  GraphicsWindow.FontSize = 16
+  GraphicsWindow.BrushColor = "#203864"
+  If text.GetLength(textje[i]) > 42 Then
+    temptext3[i] = text.GetSubText(textje[i], 1 , 40)
+    Top10text3[i] = Shapes.AddText(temptext3[i]+ "..")
+  Else
+    Top10text3[i] = Shapes.AddText(textje[i])
+  EndIf
+  Shapes.Move(Top10text3[i], 155, 465)
+  lol = i
+       
+  GraphicsWindow.FontName = "Georgia"
+  GraphicsWindow.FontSize = 24
+  GraphicsWindow.BrushColor = "#203864"
+  Top10text = Shapes.AddText("Top 10")
+  x15 = 195 - ((Text.GetLength(Top10text)/2) * 16)
+  Shapes.Move(Top10text, x15, 290)
+EndSub
+
+Sub saveData
+  savedData["playData"] = playData
+  
+  For counter456 = 1 To val
+    savedData["playlists"][PLNN[counter456]] = playlists[counter456] 
+    'TextWindow.WriteLine(playlists[PLNN[counter456]])
+    'TextWindow.WriteLine(PLNN[counter456])
+  EndFor
+  
+  File.WriteContents(fp2, savedData)
+EndSub
+
+Sub loadData
+  savedData = File.ReadContents(fp2)
+  
+  playData = savedData["playData"]
+  
+  indices = Array.GetAllIndices(savedData["playlists"])
+  val = Array.GetItemCount(indices)
+  For counter321 = 1 To val
+    playlists[counter321] = savedData["playlists"][indices[counter321]]
+    PLNN[counter321] = indices[counter321]
+  
+    'TextWindow.WriteLine("P:" + playlists[counter321])
+    'TextWindow.WriteLine("N:" + PLNN[counter321])
+  EndFor
+EndSub
+
