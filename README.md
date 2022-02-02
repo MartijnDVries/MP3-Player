@@ -98,7 +98,7 @@ De strings van deze lijst worden zo aangepast dat het deze indeling heeft: "Arti
 Reflectie
 ----
 
-Een belangrijk onderdeel van dit project was samenwerken. Alhoewel de initiele deadline niet gehaald is, heeft het project 
+Een belangrijk onderdeel van dit project was samenwerken. Alhoewel de initiele deadline niet gehaald is, heeft het project  \
 nooit echt stil gelegen. Dit was meer een onderschatting van de groote het project.  \
 De samenwerking zelf ging goed. Er was goed overleg en de taken waren verdeeld. Verder vind ik samenwerken leuk want je komt \
 samen tot een resultaat waar je individueel nooit opgekomen zou zijn. \
